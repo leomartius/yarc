@@ -1,0 +1,46 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from game.actor_ai import IdleAI
+from game.dice import roll
+from game.entity import Actor
+from game.level import Level
+from game.messages import MessageLog
+
+
+class Consumable:
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        raise NotImplementedError()
+
+
+@dataclass(frozen=True, slots=True)
+class NoEffect(Consumable):
+    message: str
+
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        log.append(self.message)
+
+
+@dataclass(frozen=True, slots=True)
+class Healing(Consumable):
+    die: int
+    message: str
+
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        heal = roll(actor.stats.hd, self.die)
+        actor.stats.hp += heal
+        if actor.stats.hp > actor.stats.max_hp:
+            actor.stats.max_hp += 1
+            actor.stats.hp = actor.stats.max_hp
+        log.append(self.message)
+
+
+@dataclass(frozen=True, slots=True)
+class HoldMonster(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        targets_in_area = {target for target in level.actors
+                           if actor.x - 2 <= target.x <= actor.x + 2 and actor.y - 2 <= target.y <= actor.y + 2}
+        for target in targets_in_area:
+            if target != actor:
+                target.ai = IdleAI()
