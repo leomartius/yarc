@@ -1,0 +1,30 @@
+[tool.mypy]
+files = ["main.py", "game/**/*.py"]
+python_version = "3.12"
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_reexport = true
+strict_equality = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+
+[tool.ruff]
+include = ["main.py", "game/**/*.py"]
+target-version = "py312"
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "F",       # Pyflakes
+    "E", "W",  # pycodestyle
+    "UP",      # pyupgrade
+    "B",       # flake8-bugbear
+    "I",       # isort
+]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
