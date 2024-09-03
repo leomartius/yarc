@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, KW_ONLY
+from dataclasses import KW_ONLY, dataclass
 
 from game.actor_ai import ActorAI, IdleAI, MeanAI
 from game.combat import Stats

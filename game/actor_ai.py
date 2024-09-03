@@ -3,9 +3,10 @@ from __future__ import annotations
 import logging
 
 from game.action import Action, MeleeAction, MoveAction, WaitAction
+from game.constants import Tile
 from game.dice import percent
 from game.entity import Actor
-from game.level import Level, Tile
+from game.level import Level
 
 logger = logging.getLogger(__name__)
 

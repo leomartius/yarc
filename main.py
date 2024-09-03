@@ -12,7 +12,7 @@ SAVEFILE = Path('yarc.sav')
 
 
 def main() -> Never:
-    print("Y.A.R.C. version 0.1.0")
+    print("Y.A.R.C. version 0.1.1")
     if __debug__:
         logging.basicConfig(level=logging.DEBUG)
     install_dir = Path(__file__).parent

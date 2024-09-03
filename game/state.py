@@ -1,4 +1,4 @@
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import tcod
 
@@ -9,8 +9,8 @@ from game.help import help_text
 from game.input import Command, MoveCommand, handle_play_event, is_cancel, is_continue, to_index
 from game.level import Level
 from game.messages import MessageLog
-from game.render import fullscreen_cancel_prompt, fullscreen_wait_prompt, highlight_cursor, map_height, message_lines, \
-    render_inventory, render_map, render_messages, render_status
+from game.render import (fullscreen_cancel_prompt, fullscreen_wait_prompt, highlight_cursor, map_height, message_lines,
+                         render_inventory, render_map, render_messages, render_status)
 from game.theme import Theme
 
 

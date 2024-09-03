@@ -12,7 +12,7 @@ from game.level import Level
 from game.messages import MessageLog
 from game.render import screen_height, screen_width
 from game.save import load_game
-from game.theme import default_theme, Theme
+from game.theme import Theme, default_theme
 
 logger = logging.getLogger(__name__)
 
