@@ -1,27 +1,22 @@
 # Yet Another Rogue Clone
 
-![2024 logo](https://i.imgur.com/GEyBFMC.png)
-
-This is my entry for the 2024
+Y.A.R.C. (Yet Another Rogue Clone) is a project aimed at recreating the
+classic _Rogue_ game using modern technology.
+Initially developed as part of the 2024
 "[RoguelikeDev Does The Complete Roguelike Tutorial](https://www.reddit.com/r/roguelikedev/comments/1dt8bqm/roguelikedev_does_the_complete_roguelike_tutorial/)"
-event.
-
-The goal is to recreate the classic Rogue game with modern technology,
-following the steps outlined in the tutorial series.
-
-This project is developed using Python 3.12 and the
+event, it is built with Python 3.12 and the
 [python-tcod](https://github.com/libtcod/python-tcod) library.
+
+The source code is [available on GitHub](https://github.com/leomartius/yarc).
 
 ## License
 
-This project is licensed under the CC0 1.0 Universal (CC0 1.0) Public Domain
-Dedication.
+This project is licensed under the BSD 3-Clause License (see LICENSE.TXT for
+details).
 
-You can copy, modify, distribute, and perform the work, even for commercial
-purposes, all without asking permission.
-
-For more details, you can view the full text of the license at
-[https://creativecommons.org/publicdomain/zero/1.0/](https://creativecommons.org/publicdomain/zero/1.0/).
+The code developed for the tutorial event is licensed under CC0 and is
+available in the
+[tutorial2024 branch](https://github.com/leomartius/yarc/tree/tutorial2024).
 
 ## Acknowledgments
 
