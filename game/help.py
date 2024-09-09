@@ -22,4 +22,5 @@ help_text = r"""
     W    wear armor
     T    take off armor
     >    go downstairs
+    v    print version number
 """.splitlines()[1:]

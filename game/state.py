@@ -12,6 +12,7 @@ from game.messages import MessageLog
 from game.render import (fullscreen_cancel_prompt, fullscreen_wait_prompt, highlight_cursor, map_height, message_lines,
                          render_inventory, render_map, render_messages, render_status)
 from game.theme import Theme
+from game.version import version_string
 
 
 class State:
@@ -62,6 +63,8 @@ class Play(State):
             case Command.TAKEOFF:
                 action = TakeOffAction()
                 return do_action(action, player, level, log)
+            case Command.VERSION:
+                log.append(f"Y.A.R.C. version {version_string.lstrip('v')}")
         return self
 
 

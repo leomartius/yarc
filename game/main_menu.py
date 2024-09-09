@@ -13,6 +13,7 @@ from game.messages import MessageLog
 from game.render import screen_height, screen_width
 from game.save import load_game
 from game.theme import Theme, default_theme
+from game.version import version_string
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,7 @@ def main_menu(context: tcod.context.Context, console: tcod.Console, theme: Theme
         console.print(1, 5, "q) Quit", fg=theme.default_fg)
         if load_error:
             console.print(1, 7, "No saved game to load.", fg=theme.default_fg)
+        console.print(79, 23, version_string, fg=theme.default_fg, alignment=tcod.constants.RIGHT)
         context.present(console)
         for event in tcod.event.wait():
             if isinstance(event, tcod.event.Quit):

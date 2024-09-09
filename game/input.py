@@ -25,6 +25,7 @@ class Command(Enum):
     WIELD = auto()
     WEAR = auto()
     TAKEOFF = auto()
+    VERSION = auto()
 
 
 MOVE_KEYS = {
@@ -67,6 +68,7 @@ COMMAND_KEYS = {
     tcod.event.KeySym.q: Command.QUAFF,
     tcod.event.KeySym.r: Command.READ,
     tcod.event.KeySym.w: Command.WIELD,
+    tcod.event.KeySym.v: Command.VERSION,
 
     tcod.event.KeySym.SLASH: Command.LOOK,
     tcod.event.KeySym.KP_DIVIDE: Command.LOOK,
