@@ -27,14 +27,14 @@ class ItemType:
 
 
 potion_types = [
-    ItemType(1, Glyph.POTION, 'potion of thirst quenching', NoEffect(message="The potion tastes bland.")),
-    ItemType(15, Glyph.POTION, 'potion of healing', Healing(die=4, message="You feel better.")),
-    ItemType(5, Glyph.POTION, 'potion of extra healing', Healing(die=8, message="You feel much better.")),
+    ItemType(1, Glyph.POTION, "potion of thirst quenching", NoEffect(message="This potion tastes extremely dull.")),
+    ItemType(15, Glyph.POTION, "potion of healing", Healing(die=4, message="You begin to feel better.")),
+    ItemType(5, Glyph.POTION, "potion of extra healing", Healing(die=8, message="You begin to feel much better.")),
 ]
 
 scroll_types = [
-    ItemType(1, Glyph.SCROLL, 'scroll of blank paper', NoEffect(message="The scroll seems devoid of any writing.")),
-    ItemType(2, Glyph.SCROLL, 'scroll of hold monster', HoldMonster()),
+    ItemType(1, Glyph.SCROLL, "scroll of blank paper", NoEffect(message="This scroll seems to be blank.")),
+    ItemType(2, Glyph.SCROLL, "scroll of hold monster", HoldMonster()),
 ]
 
 armor_types = [

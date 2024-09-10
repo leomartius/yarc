@@ -64,24 +64,27 @@ def render_inventory(console: tcod.Console, inventory: Inventory, theme: Theme, 
     for item in inventory.items:
         if filter_by_glyph is False or item.glyph == filter_by_glyph:
             if item is inventory.weapon_slot:
-                equipped = ' (wielded)'
+                equipped = " (weapon in hand)"
             elif item is inventory.armor_slot:
-                equipped = ' (worn)'
+                equipped = " (being worn)"
             else:
                 equipped = ''
             console.print(0, y, f"{chr(letter)}) a {item.name}" + equipped, fg=theme.default_fg)
             y += 1
         letter += 1
     if y == 0:
-        console.print(0, 0, "Your inventory is empty.", fg=theme.default_fg)
+        if filter_by_glyph is False:
+            console.print(0, 0, "You are empty-handed.", fg=theme.default_fg)
+        else:
+            console.print(0, 0, "You don't have anything appropriate.", fg=theme.default_fg)
 
 
 def fullscreen_wait_prompt(console: tcod.Console, theme: Theme) -> None:
-    console.print(0, screen_height - 1, "-- Press space bar to return --", fg=theme.default_fg)
+    console.print(0, screen_height - 1, "--Press space to continue--", fg=theme.default_fg)
 
 
 def fullscreen_cancel_prompt(console: tcod.Console, theme: Theme) -> None:
-    console.print(0, screen_height - 1, "-- Press Esc to cancel --", fg=theme.default_fg)
+    console.print(0, screen_height - 1, "--Press Esc to cancel--", fg=theme.default_fg)
 
 
 def highlight_cursor(console: tcod.Console, x: int, y: int, offset_y: int) -> None:

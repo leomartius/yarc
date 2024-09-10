@@ -8,19 +8,19 @@ help_text = r"""
    /|\        /|\
   b j n      1 2 3
 
-    .    or    5     rest
+    .    or    5     rest for a turn
 
 
-    ?    help screen
-    /    far look
+    ?    show help screen
+    /    identify object
     m    message log
     i    inventory
-    d    drop item
+    d    drop object
     q    quaff potion
     r    read scroll
-    w    wield weapon
+    w    wield a weapon
     W    wear armor
-    T    take off armor
-    >    go downstairs
+    T    take armor off
+    >    go down a staircase
     v    print version number
 """.splitlines()[1:]

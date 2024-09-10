@@ -37,13 +37,13 @@ class MoveAction(Action):
         if item_on_floor.gold:
             level.entities.remove(item_on_floor)
             actor.gold += item_on_floor.gold
-            log.append(f"You pick up {item_on_floor.gold} gold.")
+            log.append(f"You find {item_on_floor.gold} gold pieces.")
         else:
             if actor.inventory.add_item(item_on_floor):
                 level.entities.remove(item_on_floor)
-                log.append(f"You pick up a {item_on_floor.name}.")
+                log.append(f"You now have a {item_on_floor.name}.")
             else:
-                log.append("Your inventory is full.")
+                log.append("There's no room in your pack.")
 
 
 class MeleeAction(Action):
@@ -90,7 +90,7 @@ class StairsAction(Action):
             level.completed = True
             log.append("You descend the staircase.")
         else:
-            log.append("There are no stairs here.")
+            log.append("You see no way down.")
         return False
 
 
@@ -101,7 +101,7 @@ class DropAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         if level.get_item_at(actor.x, actor.y):
-            log.append("There is already something on the floor.")
+            log.append("There is something there already.")
             return False
         actor.inventory.remove_item(self.item)
         self.item.x, self.item.y = actor.x, actor.y
@@ -130,7 +130,7 @@ class WieldAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         actor.inventory.weapon_slot = self.item
-        log.append(f"You wield a {self.item.name}.")
+        log.append(f"You are now wielding a {self.item.name}.")
         return True
 
 
@@ -142,7 +142,7 @@ class WearAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         actor.inventory.armor_slot = self.item
-        log.append(f"You wear a {self.item.name}.")
+        log.append(f"You are now wearing a {self.item.name}.")
         return True
 
 
@@ -157,7 +157,6 @@ class UseAction(Action):
         elif self.item.glyph == Glyph.ARMOR:
             action = WearAction(self.item)
         elif self.item.glyph == Glyph.SCROLL:
-            log.append("As you read it, the scroll crumbles into dust.")
             action = ConsumeAction(self.item)
         else:
             assert self.item.glyph == Glyph.POTION
@@ -168,10 +167,10 @@ class UseAction(Action):
 class TakeOffAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
-        if actor.inventory.armor_slot:
+        if armor := actor.inventory.armor_slot:
             actor.inventory.armor_slot = None
-            log.append("You take your armor off.")
+            log.append(f"You used to be wearing a {armor}.")
             return True
         else:
-            log.append("You have nothing to take off.")
+            log.append("You aren't wearing any armor.")
             return False

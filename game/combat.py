@@ -67,7 +67,7 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
         if defender.stats.hp == 0:
             level.entities.remove(defender)
             if isinstance(attacker, Player):
-                log.append(f"You kill the {defender.name}!")
+                log.append(f"You have defeated the {defender.name}.")
                 attacker.stats.xp += defender.stats.xp
                 level_up(attacker, log)
             else:
@@ -93,7 +93,7 @@ def level_up(player: Actor, log: MessageLog) -> None:
         level += 1
         threshold *= 2
     if level > player.stats.hd:
-        log.append(f"You advance to level {level}!")
+        log.append(f"Welcome to level {level}!")
         hp_gain = roll(level - player.stats.hd, d=10)
         player.stats.max_hp += hp_gain
         player.stats.hp += hp_gain

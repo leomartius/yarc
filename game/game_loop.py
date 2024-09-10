@@ -33,7 +33,7 @@ def new_game() -> tuple[Player, Level, MessageLog]:
     level.entities.add(player)
     level.update_fov(player.x, player.y)
     log = MessageLog()
-    log.append("Press '?' to access the help screen.")
+    log.append("Welcome to the Dungeons of Doom! Press '?' for a list of available commands.")
     return player, level, log
 
 

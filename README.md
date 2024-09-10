@@ -26,6 +26,10 @@ Some code was adapted from the following projects:
 
 - [Yet Another Roguelike Tutorial](https://rogueliketutorials.com/tutorials/tcod/v2/) by Tyler Standridge and Kyle Benesch (CC0 license)
 
+Some data, algorithms, and strings are derived from the original game:
+
+- [Rogue 5.4](https://sourceforge.net/projects/rogue/) by Michael Toy, Glenn Wichman, and Ken Arnold (BSD license)
+
 Thank you to the authors and contributors of these projects for their
 invaluable work!
 
