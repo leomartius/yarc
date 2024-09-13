@@ -21,7 +21,7 @@ class SaveFile:
     signature: str
 
 
-SIGNATURE = 'YARC:0.1.0'
+SIGNATURE = 'YARC:0.2.0'
 
 
 def save_game(filename: Path, player: Player, level: Level, log: MessageLog) -> None:

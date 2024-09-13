@@ -1,4 +1,4 @@
-from __future__ import annotations  # noqa: I001
+from __future__ import annotations
 
 import tcod
 
@@ -9,8 +9,18 @@ from game.help import help_text
 from game.input import Command, MoveCommand, handle_play_event, is_cancel, is_continue, to_index
 from game.level import Level
 from game.messages import MessageLog
-from game.render import (fullscreen_cancel_prompt, fullscreen_wait_prompt, highlight_cursor, map_height, message_lines,
-                         render_inventory, render_map, render_messages, render_status)
+from game.render import (
+    fullscreen_cancel_prompt,
+    fullscreen_wait_prompt,
+    highlight_cursor,
+    map_height,
+    message_lines,
+    render_inventory,
+    render_map,
+    render_messages,
+    render_status,
+    screen_height,
+)
 from game.theme import Theme
 from game.version import version_string
 
@@ -24,10 +34,15 @@ class State:
 
 
 class Play(State):
+    def __init__(self) -> None:
+        self.messages: list[str] | None = None
+
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
+        if self.messages is None:
+            self.messages = log.get_unread(message_lines)
+        render_messages(console, self.messages, 0, theme)
         render_map(console, level, message_lines, theme)
         render_status(console, player, level, message_lines + map_height, theme)
-        render_messages(console, log.get(message_lines), 0, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         command = handle_play_event(event)
@@ -65,6 +80,7 @@ class Play(State):
                 return do_action(action, player, level, log)
             case Command.VERSION:
                 log.append(f"Y.A.R.C. version {version_string.lstrip('v')}")
+                return Play()
         return self
 
 
@@ -77,13 +93,37 @@ def do_action(action: Action, player: Player, level: Level, log: MessageLog) -> 
                 actor.ai.take_turn(actor, level, player).perform(actor, level, log)
     if player.stats.hp == 0:
         return GameOver()
+    if log.unread > message_lines:
+        return More()
     return Play()
+
+
+class More(State):
+    def __init__(self) -> None:
+        self.messages: list[str] | None = None
+
+    def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
+        if self.messages is None:
+            self.messages = log.get_unread(message_lines)
+            self.messages[-1] += "--More--"
+        render_messages(console, self.messages, 0, theme)
+        render_map(console, level, message_lines, theme)
+        render_status(console, player, level, message_lines + map_height, theme)
+
+    def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
+        if is_continue(event):
+            if log.unread > message_lines:
+                return More()
+            else:
+                return Play()
+        else:
+            return self
 
 
 class GameOver(State):
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
         render_status(console, player, level, message_lines + map_height, theme)
-        render_messages(console, log.get(message_lines), 0, theme)
+        render_messages(console, log.get_latest(message_lines), 0, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         return self
@@ -91,7 +131,7 @@ class GameOver(State):
 
 class FullscreenLog(State):
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
-        render_messages(console, log.get(len(log)), 0, theme)
+        render_messages(console, log.get_latest(screen_height - 2), 0, theme)
         fullscreen_wait_prompt(console, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
@@ -108,7 +148,7 @@ class LookAround(State):
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
         render_map(console, level, message_lines, theme)
         highlight_cursor(console, self.x, self.y, message_lines)
-        render_messages(console, log.get(message_lines), 0, theme)
+        render_messages(console, log.get_latest(message_lines), 0, theme)
         fullscreen_wait_prompt(console, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
@@ -120,6 +160,7 @@ class LookAround(State):
                 item = level.get_item_at(self.x, self.y)
                 if item:
                     log.append(item.name)
+            log.get_unread(1)
             return Play()
         command = handle_play_event(event)
         if isinstance(command, MoveCommand):
