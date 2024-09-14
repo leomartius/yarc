@@ -169,7 +169,7 @@ class TakeOffAction(Action):
         assert isinstance(actor, Player)
         if armor := actor.inventory.armor_slot:
             actor.inventory.armor_slot = None
-            log.append(f"You used to be wearing a {armor}.")
+            log.append(f"You used to be wearing a {armor.name}.")
             return True
         else:
             log.append("You aren't wearing any armor.")
