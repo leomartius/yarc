@@ -5,7 +5,6 @@ import tcod
 from game.action import Action, BumpAction, DropAction, StairsAction, TakeOffAction, UseAction, WaitAction
 from game.constants import Glyph
 from game.entity import Player
-from game.help import help_text
 from game.input import Command, MoveCommand, handle_play_event, is_cancel, is_continue, to_index
 from game.level import Level
 from game.messages import MessageLog
@@ -19,8 +18,10 @@ from game.render import (
     render_map,
     render_messages,
     render_status,
+    render_tombstone,
     screen_height,
 )
+from game.strings import help_text
 from game.theme import Theme
 from game.version import version_string
 
@@ -92,7 +93,8 @@ def do_action(action: Action, player: Player, level: Level, log: MessageLog) -> 
             if actor.ai:
                 actor.ai.take_turn(actor, level, player).perform(actor, level, log)
     if player.stats.hp == 0:
-        return GameOver()
+        assert log.unread > 0
+        return More()
     if log.unread > message_lines:
         return More()
     return Play()
@@ -112,6 +114,11 @@ class More(State):
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         if is_continue(event):
+            if player.stats.hp == 0:
+                if log.unread > 0:
+                    return More()
+                else:
+                    return GameOver()
             if log.unread > message_lines:
                 return More()
             else:
@@ -122,10 +129,11 @@ class More(State):
 
 class GameOver(State):
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
-        render_status(console, player, level, message_lines + map_height, theme)
-        render_messages(console, log.get_latest(message_lines), 0, theme)
+        render_tombstone(console, player, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
+        if is_continue(event):
+            raise SystemExit()
         return self
 
 

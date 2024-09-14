@@ -71,6 +71,8 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
                 attacker.stats.xp += defender.stats.xp
                 level_up(attacker, log)
             else:
+                assert isinstance(defender, Player)
+                defender.cause_of_death = attacker.name
                 log.append("You die...")
     else:
         log.append(f"You miss the {defender.name}." if isinstance(attacker, Player)

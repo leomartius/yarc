@@ -76,6 +76,8 @@ COMMAND_KEYS = {
 
 CONTINUE_KEYS = {
     tcod.event.KeySym.SPACE,
+    tcod.event.KeySym.RETURN,
+    tcod.event.KeySym.KP_ENTER,
 }
 
 CANCEL_KEYS = {

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Literal
 
 import numpy as np
@@ -9,6 +10,7 @@ from game.constants import Glyph
 from game.entity import Actor, Player
 from game.inventory import Inventory
 from game.level import Level
+from game.strings import tombstone
 from game.theme import Theme
 
 # screen layout
@@ -77,6 +79,24 @@ def render_inventory(console: tcod.Console, inventory: Inventory, theme: Theme, 
             console.print(0, 0, "You are empty-handed.", fg=theme.default_fg)
         else:
             console.print(0, 0, "You don't have anything appropriate.", fg=theme.default_fg)
+
+
+def render_tombstone(console: tcod.Console, player: Player, theme: Theme) -> None:
+    offset_y = screen_height - len(tombstone) - 3
+    y = offset_y
+    for line in tombstone:
+        console.print(0, y, line, fg=theme.default_fg)
+        y += 1
+    assert player.cause_of_death is not None
+    killed_by = "killed by a"
+    if player.cause_of_death[0] in 'aeiou':
+        killed_by += "n"
+    console.print(19, offset_y + 6, f"{player.name}".center(18), fg=theme.default_fg)
+    console.print(19, offset_y + 7, f"{player.gold} Au".center(18), fg=theme.default_fg)
+    console.print(19, offset_y + 8, killed_by.center(18), fg=theme.default_fg)
+    console.print(19, offset_y + 9, player.cause_of_death.center(18), fg=theme.default_fg)
+    console.print(19, offset_y + 10, f"{datetime.now().year}".center(18), fg=theme.default_fg)
+    console.print(0, screen_height - 1, "[Press enter to continue]", fg=theme.default_fg)
 
 
 def fullscreen_wait_prompt(console: tcod.Console, theme: Theme) -> None:

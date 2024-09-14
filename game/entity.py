@@ -30,6 +30,7 @@ class Actor(Entity):
 class Player(Actor):
     gold: int
     inventory: Inventory
+    cause_of_death: str | None = None
 
 
 @dataclass(eq=False, slots=True, kw_only=True)

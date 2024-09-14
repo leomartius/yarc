@@ -28,8 +28,15 @@ def new_game() -> tuple[Player, Level, MessageLog]:
                         weapon=Weapon(plus_hit=1, plus_dmg=1, damage=9))
     inventory.add_item(weapon)
     inventory.weapon_slot = weapon
-    player = Player(x=level.entry_x, y=level.entry_y, glyph=Glyph.PLAYER, name='player',
-                    stats=Stats(max_hp=12, ac=10, hd=1, dmg=4, xp=0, strength=16), gold=0, inventory=inventory)
+    player = Player(
+        x=level.entry_x,
+        y=level.entry_y,
+        glyph=Glyph.PLAYER,
+        name="Rodney",
+        stats=Stats(max_hp=12, ac=10, hd=1, dmg=4, xp=0, strength=16),
+        gold=0,
+        inventory=inventory,
+    )
     level.entities.add(player)
     level.update_fov(player.x, player.y)
     log = MessageLog()
