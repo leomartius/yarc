@@ -119,6 +119,10 @@ def make_room(cell: Cell, level: Level) -> Room:
     level.tiles[line_slice(room.x1, room.y1, room.x2, room.y1)] = Tile.H_WALL
     level.tiles[line_slice(room.x1, room.y2, room.x2, room.y2)] = Tile.H_WALL
     level.tiles[room.inner_slice] = Tile.FLOOR
+    level.tiles[room.x1, room.y1] = Tile.TL_CORNER
+    level.tiles[room.x2, room.y1] = Tile.TR_CORNER
+    level.tiles[room.x1, room.y2] = Tile.BL_CORNER
+    level.tiles[room.x2, room.y2] = Tile.BR_CORNER
     level.rooms.append((room.x1, room.y1, room.x2, room.y2))
     return room
 
@@ -264,7 +268,7 @@ def generate_level(map_width: int, map_height: int, depth: int) -> Level:
 
     seed = random.SystemRandom().getrandbits(64)
     rng.seed(seed)
-    logger.info("Level seed is 0x%08x", seed)
+    logger.info("Level seed is 0x%08X", seed)
 
     junction_indices = rng.choices(range(9), k=rng.randrange(4))
     rooms: list[Room | Junction] = []
