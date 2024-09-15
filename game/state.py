@@ -11,13 +11,13 @@ from game.messages import MessageLog
 from game.render import (
     fullscreen_cancel_prompt,
     fullscreen_wait_prompt,
-    highlight_cursor,
     map_height,
     message_lines,
     render_inventory,
     render_map,
     render_messages,
     render_status,
+    render_symbol_key,
     render_tombstone,
     screen_height,
 )
@@ -60,8 +60,8 @@ class Play(State):
                 return do_action(action, player, level, log)
             case Command.MESSAGES:
                 return FullscreenLog()
-            case Command.LOOK:
-                return LookAround(player, log)
+            case Command.KEYS:
+                return KeyScreen()
             case Command.INVENTORY:
                 return ShowInventory()
             case Command.HELP:
@@ -148,32 +148,14 @@ class FullscreenLog(State):
         return self
 
 
-class LookAround(State):
-    def __init__(self, player: Player, log: MessageLog):
-        log.append("Pick an object...")
-        self.x, self.y = player.x, player.y
-
+class KeyScreen(State):
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
-        render_map(console, level, message_lines, theme)
-        highlight_cursor(console, self.x, self.y, message_lines)
-        render_messages(console, log.get_latest(message_lines), 0, theme)
+        render_symbol_key(console, theme)
         fullscreen_wait_prompt(console, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         if is_continue(event):
-            actor = level.get_actor_at(self.x, self.y)
-            if actor:
-                log.append(actor.name)
-            else:
-                item = level.get_item_at(self.x, self.y)
-                if item:
-                    log.append(item.name)
-            log.get_unread(1)
             return Play()
-        command = handle_play_event(event)
-        if isinstance(command, MoveCommand):
-            if level.in_bounds(self.x + command.dx, self.y + command.dy):
-                self.x, self.y = self.x + command.dx, self.y + command.dy
         return self
 
 

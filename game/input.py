@@ -16,7 +16,7 @@ class Command(Enum):
     WAIT = auto()
     STAIRS = auto()
     MESSAGES = auto()
-    LOOK = auto()
+    KEYS = auto()
     INVENTORY = auto()
     HELP = auto()
     DROP = auto()
@@ -70,8 +70,8 @@ COMMAND_KEYS = {
     tcod.event.KeySym.w: Command.WIELD,
     tcod.event.KeySym.v: Command.VERSION,
 
-    tcod.event.KeySym.SLASH: Command.LOOK,
-    tcod.event.KeySym.KP_DIVIDE: Command.LOOK,
+    tcod.event.KeySym.SLASH: Command.KEYS,
+    tcod.event.KeySym.KP_DIVIDE: Command.KEYS,
 }
 
 CONTINUE_KEYS = {

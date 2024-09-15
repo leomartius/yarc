@@ -12,7 +12,7 @@ help_text = r"""
 
 
     ?    show help screen
-    /    identify object
+    /    show symbol key
     m    message log
     i    inventory
     d    drop object
@@ -24,6 +24,31 @@ help_text = r"""
     >    go down a staircase
     v    print version number
 """.splitlines()[1:]
+
+symbol_key = """\
+    .    room floor                         *    gold
+  -   |  wall of a room                     :    food
+    +    door                               !    potion
+    #    passage                            ?    scroll
+    %    a staircase                        )    weapon
+    ^    trap                               ]    armor
+    ,    the Amulet of Yendor               =    ring
+    @    you                                /    wand or staff
+
+    A    giant ant                          N    nymph
+    B    bat                                O    orc
+    C    centaur                            P    purple worm
+    D    dragon                             Q    quasit
+    E    floating eye                       R    rust monster
+    F    violet fungi                       S    snake
+    G    gnome                              T    troll
+    H    hobgoblin                          U    umber hulk
+    I    invisible stalker                  V    vampire
+    J    jackal                             W    wraith
+    K    kobold                             X    xorn
+    L    leprechaun                         Y    yeti
+    M    mimic                              Z    zombie
+""".splitlines()
 
 tombstone = r"""
                        __________
