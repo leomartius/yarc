@@ -6,13 +6,18 @@ from enum import IntEnum
 class Tile(IntEnum):
     # solid tiles
     ROCK = 0
-    H_WALL = 1
-    V_WALL = 2
+    TL_CORNER = 1
+    TR_CORNER = 2
+    BL_CORNER = 3
+    BR_CORNER = 4
+    H_WALL = 5
+    V_WALL = 6
     # walkable tiles
-    FLOOR = 3
-    PASSAGE = 4
-    STAIRS = 5
-    DOOR = 6
+    FLOOR = 7
+    PASSAGE = 8
+    STAIRS = 9
+    TRAP = 10
+    DOOR = 11
     # sentinel values
     DEFAULT = ROCK
     MAX_SOLID = V_WALL
