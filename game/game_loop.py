@@ -48,7 +48,7 @@ def game_loop(context: tcod.context.Context, console: tcod.Console, theme: Theme
               player: Player, level: Level, log: MessageLog) -> Never:
     state: State = Play()
     while True:
-        console.clear()
+        console.clear(fg=theme.default_fg, bg=theme.default_bg)
         state.render(console, player, level, log, theme)
         context.present(console)
         for event in tcod.event.wait():

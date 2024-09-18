@@ -20,6 +20,13 @@ def parse_command_line() -> dict[str, Any]:
         dest='loglevel',
         help="set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
     )
+    parser.add_argument(
+        '--theme',
+        metavar='THEME',
+        choices=('default',),
+        default='default',
+        help="choose a graphical theme",
+    )
     parser.add_argument('-v', '--version', action='store_true', help="print version number and exit")
     args = parser.parse_args()
     args.loglevel = args.loglevel.upper()
@@ -37,7 +44,7 @@ def main() -> Never:
     # Import game modules after basic initialization.
     from game.main_menu import show_menu
     install_dir = Path(__file__).parent
-    show_menu(install_dir / ASSETS, SAVEFILE)
+    show_menu(install_dir / ASSETS, SAVEFILE, args['theme'])
 
 
 if __name__ == '__main__':

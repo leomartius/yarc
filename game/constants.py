@@ -36,6 +36,7 @@ class Glyph(IntEnum):
     RING = 7
     WAND = 8
     AMULET = 9
+    MAGIC = 10
     # monster glyphs depend on type
     MONSTER = -1
     # placeholder

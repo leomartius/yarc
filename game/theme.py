@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -9,16 +11,26 @@ import tcod
 
 @dataclass(frozen=True, slots=True)
 class Theme:
+    tileset: tuple[str, int, int, Iterable[int]]
     default_fg: tuple[int, int, int]
+    default_bg: tuple[int, int, int]
+    status_fg: tuple[int, int, int]
     monster_fg: tuple[int, int, int]
     entity_glyphs: list[tuple[str, tuple[int, int, int]]]
     visible_glyphs: np.ndarray[Any, np.dtype[np.void]]
     explored_glyphs: np.ndarray[Any, np.dtype[np.void]]
     unexplored: np.void
 
+    def load_tileset(self, datadir: Path) -> tcod.tileset.Tileset:
+        filename, columns, rows, charmap = self.tileset
+        return tcod.tileset.load_tilesheet(datadir / filename, columns, rows, charmap)
 
-default_theme = Theme(
+
+default = Theme(
+    tileset=('vga-9x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437),
     default_fg=(0xAA, 0xAA, 0xAA),
+    default_bg=(0x00, 0x00, 0x00),
+    status_fg=(0xAA, 0xAA, 0xAA),
     monster_fg=(0xAA, 0xAA, 0xAA),
     entity_glyphs=[
         ('@', (0xAA, 0xAA, 0xAA)),  # player
@@ -31,6 +43,7 @@ default_theme = Theme(
         ('=', (0xAA, 0xAA, 0xAA)),  # ring
         ('/', (0xAA, 0xAA, 0xAA)),  # wand
         (',', (0xAA, 0xAA, 0xAA)),  # amulet
+        ('$', (0xAA, 0xAA, 0xAA)),  # magic
     ],
     visible_glyphs=np.array(
         [

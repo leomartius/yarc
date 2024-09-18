@@ -6,22 +6,23 @@ from typing import Never
 
 import tcod
 
+import game.theme
 from game.entity import Player
 from game.game_loop import game_loop, new_game
 from game.level import Level
 from game.messages import MessageLog
 from game.render import screen_height, screen_width
 from game.save import load_game
-from game.theme import Theme, default_theme
 from game.version import version_string
 
 logger = logging.getLogger(__name__)
 
 
-def show_menu(datadir: Path, savefile: Path) -> Never:
+def show_menu(datadir: Path, savefile: Path, theme_name: str) -> Never:
     logger.info("Starting main UI initialization.")
-    theme = default_theme
-    tileset = tcod.tileset.load_tilesheet(datadir / 'vga-9x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437)
+    logger.debug(f"Loading theme: {theme_name}")
+    theme: game.theme.Theme = getattr(game.theme, theme_name)
+    tileset = theme.load_tileset(datadir)
     with tcod.context.new(
             columns=screen_width,
             rows=screen_height,
@@ -33,11 +34,12 @@ def show_menu(datadir: Path, savefile: Path) -> Never:
         game_loop(context, console, theme, savefile, player, level, log)
 
 
-def main_menu(context: tcod.context.Context, console: tcod.Console, theme: Theme,
-              savefile: Path) -> tuple[Player, Level, MessageLog]:
+def main_menu(
+    context: tcod.context.Context, console: tcod.Console, theme: game.theme.Theme, savefile: Path
+) -> tuple[Player, Level, MessageLog]:
     load_error = False
     while True:
-        console.clear()
+        console.clear(fg=theme.default_fg, bg=theme.default_bg)
         console.print(0, 1, "Yet Another Rogue Clone", fg=theme.default_fg)
         console.print(1, 3, "n) Play a new game", fg=theme.default_fg)
         console.print(1, 4, "c) Continue last game", fg=theme.default_fg)
