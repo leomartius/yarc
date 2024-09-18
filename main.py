@@ -23,13 +23,15 @@ def parse_command_line() -> dict[str, Any]:
     parser.add_argument(
         '--theme',
         metavar='THEME',
-        choices=('default',),
+        choices=('default', 'vt220', 'vt220_amber', 'vt220_green', 'vt220_white'),
         default='default',
-        help="choose a graphical theme",
+        help="choose a graphical theme (default, vt220)",
     )
     parser.add_argument('-v', '--version', action='store_true', help="print version number and exit")
     args = parser.parse_args()
     args.loglevel = args.loglevel.upper()
+    if args.theme == 'vt220':
+        args.theme = 'vt220_green'
     return vars(args)
 
 

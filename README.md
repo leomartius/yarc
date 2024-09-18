@@ -30,6 +30,10 @@ Some data, algorithms, and strings are derived from the original game:
 
 - [Rogue 5.4](https://sourceforge.net/projects/rogue/) by Michael Toy, Glenn Wichman, and Ken Arnold (BSD license)
 
+Character glyphs are adapted from the following sources:
+
+- [VT220 Built-in Glyphs](https://vt100.net/dec/vt220/glyphs) by Paul Flo Williams
+
 Thank you to the authors and contributors of these projects for their
 invaluable work!
 
