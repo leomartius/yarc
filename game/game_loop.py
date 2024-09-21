@@ -50,7 +50,7 @@ def game_loop(context: tcod.context.Context, console: tcod.Console, theme: Theme
     while True:
         console.clear(fg=theme.default_fg, bg=theme.default_bg)
         state.render(console, player, level, log, theme)
-        context.present(console)
+        context.present(console, keep_aspect=True, integer_scaling=True, clear_color=theme.default_bg)
         for event in tcod.event.wait():
             if isinstance(event, tcod.event.Quit):
                 if not isinstance(state, GameOver):

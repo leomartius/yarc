@@ -18,16 +18,19 @@ from game.version import version_string
 logger = logging.getLogger(__name__)
 
 
-def show_menu(datadir: Path, savefile: Path, theme_name: str) -> Never:
+def show_menu(datadir: Path, savefile: Path, theme_name: str, borderless: bool, scale_factor: int) -> Never:
     logger.info("Starting main UI initialization.")
     logger.debug(f"Loading theme: {theme_name}")
     theme: game.theme.Theme = getattr(game.theme, theme_name)
     tileset = theme.load_tileset(datadir)
     with tcod.context.new(
-            columns=screen_width,
-            rows=screen_height,
-            tileset=tileset,
-            title="Yet Another Rogue Clone",
+        columns=screen_width,
+        rows=screen_height,
+        width=screen_width * tileset.tile_width * scale_factor,
+        height=screen_height * tileset.tile_height * scale_factor,
+        tileset=tileset,
+        title="Yet Another Rogue Clone",
+        sdl_window_flags=tcod.context.SDL_WINDOW_BORDERLESS if borderless else None,
     ) as context:
         console = tcod.console.Console(screen_width, screen_height, order='F')
         player, level, log = main_menu(context, console, theme, savefile)
@@ -47,7 +50,7 @@ def main_menu(
         if load_error:
             console.print(1, 7, "No saved game to load.", fg=theme.default_fg)
         console.print(79, 23, version_string, fg=theme.default_fg, alignment=tcod.constants.RIGHT)
-        context.present(console)
+        context.present(console, keep_aspect=True, integer_scaling=True, clear_color=theme.default_bg)
         for event in tcod.event.wait():
             if isinstance(event, tcod.event.Quit):
                 raise SystemExit()
