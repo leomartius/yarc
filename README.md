@@ -34,6 +34,8 @@ Character glyphs are adapted from the following sources:
 
 - [VT220 Built-in Glyphs](https://vt100.net/dec/vt220/glyphs) by Paul Flo Williams
 
+- [Bitmap fonts compatible w/VGA text mode](https://github.com/viler-int10h/vga-text-mode-fonts) by VileR
+
 Thank you to the authors and contributors of these projects for their
 invaluable work!
 

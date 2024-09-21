@@ -27,15 +27,17 @@ def parse_command_line() -> dict[str, Any]:
     parser.add_argument(
         '--theme',
         metavar='THEME',
-        choices=('default', 'vt220', 'vt220_amber', 'vt220_green', 'vt220_white'),
+        choices=('default', 'vt220', 'vt220_amber', 'vt220_green', 'vt220_white', 'dos', 'dos_cga', 'dos_vga'),
         default='default',
-        help="choose a graphical theme (default, vt220)",
+        help="select the graphical theme to use (default, vt220, dos)",
     )
     parser.add_argument('--tcod', nargs=argparse.REMAINDER, help="forward additional options to the libtcod library")
     args = parser.parse_args()
     args.loglevel = args.loglevel.upper()
     if args.theme == 'vt220':
         args.theme = 'vt220_green'
+    if args.theme == 'dos':
+        args.theme = 'dos_cga'
     return vars(args)
 
 

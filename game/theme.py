@@ -265,3 +265,140 @@ vt220_white = Theme(
     ),
     unexplored=np.void((ord(' '), MONO_WHITE, MONO_BLACK), dtype=tcod.console.rgb_graphic),
 )
+
+
+# ===============
+#  DOS emulation
+# ===============
+
+CGA = ('cga-8x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437)
+VGA = ('vga-8x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437)
+
+CGA_BLACK = (0x00, 0x00, 0x00)
+CGA_BLUE = (0x00, 0x00, 0xAA)
+CGA_GREEN = (0x00, 0xAA, 0x00)
+CGA_CYAN = (0x00, 0xAA, 0xAA)
+CGA_RED = (0xAA, 0x00, 0x00)
+CGA_MAGENTA = (0xAA, 0x00, 0xAA)
+CGA_BROWN = (0xAA, 0x55, 0x00)
+CGA_LIGHT_GRAY = (0xAA, 0xAA, 0xAA)
+CGA_DARK_GRAY = (0x55, 0x55, 0x55)
+CGA_LIGHT_BLUE = (0x55, 0x55, 0xFF)
+CGA_LIGHT_GREEN = (0x55, 0xFF, 0x55)
+CGA_LIGHT_CYAN = (0x55, 0xFF, 0xFF)
+CGA_LIGHT_RED = (0xFF, 0x55, 0x55)
+CGA_LIGHT_MAGENTA = (0xFF, 0x55, 0xFF)
+CGA_YELLOW = (0xFF, 0xFF, 0x55)
+CGA_WHITE = (0xFF, 0xFF, 0xFF)
+
+dos_cga = Theme(
+    tileset=CGA,
+    default_fg=CGA_LIGHT_GRAY,
+    default_bg=CGA_BLACK,
+    status_fg=CGA_YELLOW,
+    monster_fg=CGA_LIGHT_GRAY,
+    entity_glyphs=[
+        (chr(0x263A), CGA_YELLOW),  # player
+        (chr(0x263C), CGA_YELLOW),  # gold
+        (chr(0x00A1), CGA_LIGHT_BLUE),  # potion
+        (chr(0x266A), CGA_LIGHT_BLUE),  # scroll
+        (chr(0x2663), CGA_RED),  # food
+        (chr(0x2191), CGA_LIGHT_BLUE),  # weapon
+        (chr(0x25D8), CGA_LIGHT_BLUE),  # armor
+        (chr(0x25CB), CGA_LIGHT_BLUE),  # ring
+        (chr(0x03C4), CGA_LIGHT_BLUE),  # wand
+        (chr(0x2640), CGA_LIGHT_BLUE),  # amulet
+        (chr(0x0024), CGA_LIGHT_GRAY),  # magic
+    ],
+    visible_glyphs=np.array(
+        [
+            (0x0020, CGA_LIGHT_GRAY, CGA_BLACK),  # rock
+            (0x2554, CGA_BROWN, CGA_BLACK),  # top left corner
+            (0x2557, CGA_BROWN, CGA_BLACK),  # top right corner
+            (0x255A, CGA_BROWN, CGA_BLACK),  # bottom left corner
+            (0x255D, CGA_BROWN, CGA_BLACK),  # bottom right corner
+            (0x2550, CGA_BROWN, CGA_BLACK),  # horizontal wall
+            (0x2551, CGA_BROWN, CGA_BLACK),  # vertical wall
+            (0x00B7, CGA_LIGHT_GREEN, CGA_BLACK),  # floor
+            (0x2592, CGA_LIGHT_GRAY, CGA_BLACK),  # passage
+            (0x2261, CGA_BLACK, CGA_GREEN),  # stairs
+            (0x2666, CGA_MAGENTA, CGA_BLACK),  # trap
+            (0x256C, CGA_BROWN, CGA_BLACK),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    explored_glyphs=np.array(
+        [
+            (0x0020, CGA_LIGHT_GRAY, CGA_BLACK),  # rock
+            (0x2554, CGA_BROWN, CGA_BLACK),  # top left corner
+            (0x2557, CGA_BROWN, CGA_BLACK),  # top right corner
+            (0x255A, CGA_BROWN, CGA_BLACK),  # bottom left corner
+            (0x255D, CGA_BROWN, CGA_BLACK),  # bottom right corner
+            (0x2550, CGA_BROWN, CGA_BLACK),  # horizontal wall
+            (0x2551, CGA_BROWN, CGA_BLACK),  # vertical wall
+            (0x00B7, CGA_LIGHT_GREEN, CGA_BLACK),  # floor
+            (0x2592, CGA_LIGHT_GRAY, CGA_BLACK),  # passage
+            (0x2261, CGA_BLACK, CGA_GREEN),  # stairs
+            (0x2666, CGA_MAGENTA, CGA_BLACK),  # trap
+            (0x256C, CGA_BROWN, CGA_BLACK),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    unexplored=np.void((0x0020, CGA_LIGHT_GRAY, CGA_BLACK), dtype=tcod.console.rgb_graphic),
+)
+
+dos_vga = Theme(
+    tileset=VGA,
+    default_fg=CGA_LIGHT_GRAY,
+    default_bg=CGA_BLACK,
+    status_fg=CGA_YELLOW,
+    monster_fg=CGA_LIGHT_GRAY,
+    entity_glyphs=[
+        (chr(0x263A), CGA_YELLOW),  # player
+        (chr(0x263C), CGA_YELLOW),  # gold
+        (chr(0x00A1), CGA_LIGHT_BLUE),  # potion
+        (chr(0x266A), CGA_LIGHT_BLUE),  # scroll
+        (chr(0x2663), CGA_RED),  # food
+        (chr(0x2191), CGA_LIGHT_BLUE),  # weapon
+        (chr(0x25D8), CGA_LIGHT_BLUE),  # armor
+        (chr(0x25CB), CGA_LIGHT_BLUE),  # ring
+        (chr(0x03C4), CGA_LIGHT_BLUE),  # wand
+        (chr(0x2640), CGA_LIGHT_BLUE),  # amulet
+        (chr(0x0024), CGA_LIGHT_GRAY),  # magic
+    ],
+    visible_glyphs=np.array(
+        [
+            (0x0020, CGA_LIGHT_GRAY, CGA_BLACK),  # rock
+            (0x2554, CGA_BROWN, CGA_BLACK),  # top left corner
+            (0x2557, CGA_BROWN, CGA_BLACK),  # top right corner
+            (0x255A, CGA_BROWN, CGA_BLACK),  # bottom left corner
+            (0x255D, CGA_BROWN, CGA_BLACK),  # bottom right corner
+            (0x2550, CGA_BROWN, CGA_BLACK),  # horizontal wall
+            (0x2551, CGA_BROWN, CGA_BLACK),  # vertical wall
+            (0x00B7, CGA_LIGHT_GREEN, CGA_BLACK),  # floor
+            (0x2592, CGA_LIGHT_GRAY, CGA_BLACK),  # passage
+            (0x2261, CGA_BLACK, CGA_GREEN),  # stairs
+            (0x2666, CGA_MAGENTA, CGA_BLACK),  # trap
+            (0x256C, CGA_BROWN, CGA_BLACK),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    explored_glyphs=np.array(
+        [
+            (0x0020, CGA_LIGHT_GRAY, CGA_BLACK),  # rock
+            (0x2554, CGA_BROWN, CGA_BLACK),  # top left corner
+            (0x2557, CGA_BROWN, CGA_BLACK),  # top right corner
+            (0x255A, CGA_BROWN, CGA_BLACK),  # bottom left corner
+            (0x255D, CGA_BROWN, CGA_BLACK),  # bottom right corner
+            (0x2550, CGA_BROWN, CGA_BLACK),  # horizontal wall
+            (0x2551, CGA_BROWN, CGA_BLACK),  # vertical wall
+            (0x00B7, CGA_LIGHT_GREEN, CGA_BLACK),  # floor
+            (0x2592, CGA_LIGHT_GRAY, CGA_BLACK),  # passage
+            (0x2261, CGA_BLACK, CGA_GREEN),  # stairs
+            (0x2666, CGA_MAGENTA, CGA_BLACK),  # trap
+            (0x256C, CGA_BROWN, CGA_BLACK),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    unexplored=np.void((0x0020, CGA_LIGHT_GRAY, CGA_BLACK), dtype=tcod.console.rgb_graphic),
+)
