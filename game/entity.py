@@ -38,6 +38,9 @@ class Item(Entity):
     gold: int | None = None
     consumable: Consumable | None = None
 
+    def __str__(self) -> str:
+        return f"{article(self.name)} {self.name}"
+
 
 @dataclass(eq=False, slots=True, kw_only=True)
 class ArmorItem(Item):
@@ -47,3 +50,7 @@ class ArmorItem(Item):
 @dataclass(eq=False, slots=True, kw_only=True)
 class WeaponItem(Item):
     weapon: Weapon
+
+
+def article(noun: str) -> str:
+    return "an" if noun[0] in 'aeiou' else "a"

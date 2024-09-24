@@ -41,7 +41,7 @@ class MoveAction(Action):
         else:
             if actor.inventory.add_item(item_on_floor):
                 level.entities.remove(item_on_floor)
-                log.append(f"You now have a {item_on_floor.name}.")
+                log.append(f"You now have {item_on_floor}.")
             else:
                 log.append("There's no room in your pack.")
 
@@ -106,7 +106,7 @@ class DropAction(Action):
         actor.inventory.remove_item(self.item)
         self.item.x, self.item.y = actor.x, actor.y
         level.entities.add(self.item)
-        log.append(f"You drop a {self.item.name}.")
+        log.append(f"You drop {self.item}.")
         return True
 
 
@@ -130,7 +130,7 @@ class WieldAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         actor.inventory.weapon_slot = self.item
-        log.append(f"You are now wielding a {self.item.name}.")
+        log.append(f"You are now wielding {self.item}.")
         return True
 
 
@@ -142,7 +142,7 @@ class WearAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         actor.inventory.armor_slot = self.item
-        log.append(f"You are now wearing a {self.item.name}.")
+        log.append(f"You are now wearing {self.item}.")
         return True
 
 
@@ -169,7 +169,7 @@ class TakeOffAction(Action):
         assert isinstance(actor, Player)
         if armor := actor.inventory.armor_slot:
             actor.inventory.armor_slot = None
-            log.append(f"You used to be wearing a {armor.name}.")
+            log.append(f"You used to be wearing {armor}.")
             return True
         else:
             log.append("You aren't wearing any armor.")

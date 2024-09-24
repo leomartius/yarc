@@ -7,7 +7,7 @@ import numpy as np
 import tcod
 
 from game.constants import Glyph, Tile
-from game.entity import Actor, Player
+from game.entity import Actor, Player, article
 from game.inventory import Inventory
 from game.level import Level
 from game.strings import symbol_key, tombstone
@@ -71,7 +71,7 @@ def render_inventory(console: tcod.Console, inventory: Inventory, theme: Theme, 
                 equipped = " (being worn)"
             else:
                 equipped = ''
-            console.print(0, y, f"{chr(letter)}) a {item.name}" + equipped, fg=theme.default_fg)
+            console.print(0, y, f"{chr(letter)}) {item}{equipped}", fg=theme.default_fg)
             y += 1
         letter += 1
     if y == 0:
@@ -125,9 +125,7 @@ def render_tombstone(console: tcod.Console, player: Player, theme: Theme) -> Non
         console.print(0, y, line, fg=theme.default_fg)
         y += 1
     assert player.cause_of_death is not None
-    killed_by = "killed by a"
-    if player.cause_of_death[0] in 'aeiou':
-        killed_by += "n"
+    killed_by = f"killed by {article(player.cause_of_death)}"
     console.print(19, offset_y + 6, f"{player.name}".center(18), fg=theme.default_fg)
     console.print(19, offset_y + 7, f"{player.gold} Au".center(18), fg=theme.default_fg)
     console.print(19, offset_y + 8, killed_by.center(18), fg=theme.default_fg)
