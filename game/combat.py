@@ -29,10 +29,16 @@ class Stats:
         self.hp = self.max_hp
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(eq=False, slots=True, kw_only=True)
 class Armor:
-    # armor class
-    ac: int
+    # base armor class
+    base_ac: int
+    # armor class bonus
+    plus_ac: int = 0
+
+    @property
+    def ac(self) -> int:
+        return self.base_ac - self.plus_ac
 
 
 @dataclass(frozen=True, slots=True)

@@ -35,6 +35,8 @@ class Player(Actor):
 
 @dataclass(eq=False, slots=True, kw_only=True)
 class Item(Entity):
+    cursed: bool = False
+    identified: bool = False
     gold: int | None = None
     consumable: Consumable | None = None
 
@@ -45,6 +47,12 @@ class Item(Entity):
 @dataclass(eq=False, slots=True, kw_only=True)
 class ArmorItem(Item):
     armor: Armor
+
+    def __str__(self) -> str:
+        if self.identified:
+            return f"{self.armor.plus_ac:+d} {self.name} [armor class {self.armor.ac}]"
+        else:
+            return self.name
 
 
 @dataclass(eq=False, slots=True, kw_only=True)

@@ -21,7 +21,9 @@ from game.theme import Theme
 def new_game() -> tuple[Player, Level, MessageLog]:
     level = generate_level(map_width, map_height, 1)
     inventory = Inventory()
-    armor = ArmorItem(x=0, y=0, glyph=Glyph.ARMOR, name='+1 ring mail', armor=Armor(ac=6))
+    armor = ArmorItem(
+        x=0, y=0, glyph=Glyph.ARMOR, name="ring mail", armor=Armor(base_ac=7, plus_ac=+1), identified=True
+    )
     inventory.add_item(armor)
     inventory.armor_slot = armor
     weapon = WeaponItem(x=0, y=0, glyph=Glyph.WEAPON, name='+1,+1 mace',

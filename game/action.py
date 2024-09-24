@@ -103,6 +103,9 @@ class DropAction(Action):
         if level.get_item_at(actor.x, actor.y):
             log.append("There is something there already.")
             return False
+        if self.item.cursed and actor.inventory.is_equipped(self.item):
+            log.append("You can't. It appears to be cursed.")
+            return False
         actor.inventory.remove_item(self.item)
         self.item.x, self.item.y = actor.x, actor.y
         level.entities.add(self.item)
@@ -142,6 +145,7 @@ class WearAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         actor.inventory.armor_slot = self.item
+        self.item.identified = True
         log.append(f"You are now wearing {self.item}.")
         return True
 
@@ -168,6 +172,9 @@ class TakeOffAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
         if armor := actor.inventory.armor_slot:
+            if armor.cursed:
+                log.append("You can't. It appears to be cursed.")
+                return False
             actor.inventory.armor_slot = None
             log.append(f"You used to be wearing {armor}.")
             return True

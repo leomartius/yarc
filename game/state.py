@@ -75,6 +75,9 @@ class Play(State):
             case Command.WIELD:
                 return UseItem(glyph=Glyph.WEAPON)
             case Command.WEAR:
+                if player.inventory.armor_slot:
+                    log.append("You are already wearing some. You'll have to take it off first.")
+                    return Play()
                 return UseItem(glyph=Glyph.ARMOR)
             case Command.TAKEOFF:
                 action = TakeOffAction()

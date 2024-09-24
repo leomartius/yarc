@@ -38,8 +38,14 @@ scroll_types = [
 ]
 
 armor_types = [
-    ItemType(20, Glyph.ARMOR, 'leather armor', Armor(ac=8)),
-    ItemType(12, Glyph.ARMOR, 'chain mail', Armor(ac=5)),
+    ItemType(20, Glyph.ARMOR, "leather armor", Armor(base_ac=8)),
+    ItemType(15, Glyph.ARMOR, "ring mail", Armor(base_ac=7)),
+    ItemType(15, Glyph.ARMOR, "studded leather armor", Armor(base_ac=7)),
+    ItemType(13, Glyph.ARMOR, "scale mail", Armor(base_ac=6)),
+    ItemType(12, Glyph.ARMOR, "chain mail", Armor(base_ac=5)),
+    ItemType(10, Glyph.ARMOR, "splint mail", Armor(base_ac=4)),
+    ItemType(10, Glyph.ARMOR, "banded mail", Armor(base_ac=4)),
+    ItemType(5, Glyph.ARMOR, "plate mail", Armor(base_ac=3)),
 ]
 
 weapon_types = [
@@ -61,7 +67,7 @@ class ItemCategory:
 item_categories = [
     ItemCategory(27, potion_types),
     ItemCategory(27, scroll_types),
-    ItemCategory(9, armor_types),
+    ItemCategory(8, armor_types),
     ItemCategory(9, weapon_types),
 ]
 

@@ -4,7 +4,7 @@ import logging
 import random
 
 from game.constants import Glyph, Tile
-from game.entity import Item
+from game.entity import ArmorItem, Item
 from game.items import get_item_categories
 from game.level import Level
 from game.monsters import eligible_monsters
@@ -259,6 +259,13 @@ def place_item(all_rooms: list[Room | Junction], level: Level) -> None:
     item_types, weights = category.get_item_types()
     item_type = rng.choices(item_types, weights).pop()
     item = item_type.spawn(x, y)
+    if isinstance(item, ArmorItem):
+        r = rng.random()
+        if r < 0.20:
+            item.cursed = True
+            item.armor.plus_ac = -rng.randint(1, 3)
+        elif r < 0.28:
+            item.armor.plus_ac = +rng.randint(1, 3)
     level.entities.add(item)
 
 

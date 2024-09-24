@@ -43,3 +43,7 @@ class Inventory:
         if item is self.weapon_slot:
             self.weapon_slot = None
         self.items.remove(item)
+
+    def is_equipped(self, item: Item) -> bool:
+        assert item in self.items
+        return item in (self.armor_slot, self.weapon_slot)
