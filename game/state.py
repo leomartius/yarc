@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import tcod
 
+import game.turn
 from game.action import Action, BumpAction, DropAction, StairsAction, TakeOffAction, UseAction, WaitAction
 from game.constants import Glyph
 from game.entity import Player
@@ -91,10 +92,7 @@ class Play(State):
 def do_action(action: Action, player: Player, level: Level, log: MessageLog) -> State:
     end_turn = action.perform(player, level, log)
     if end_turn:
-        level.update_fov(player.x, player.y)
-        for actor in level.actors:
-            if actor.ai:
-                actor.ai.take_turn(actor, level, player).perform(actor, level, log)
+        game.turn.end_turn(player, level, log)
     if player.stats.hp == 0:
         assert log.unread > 0
         return More()

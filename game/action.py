@@ -5,6 +5,7 @@ from game.constants import Glyph
 from game.entity import Actor, ArmorItem, Item, Player, WeaponItem
 from game.level import Level
 from game.messages import MessageLog
+from game.turn import end_turn
 
 
 class Action:
@@ -106,6 +107,10 @@ class DropAction(Action):
         if self.item.cursed and actor.inventory.is_equipped(self.item):
             log.append("You can't. It appears to be cursed.")
             return False
+        if self.item is actor.inventory.armor_slot:
+            end_turn(actor, level, log)
+            if actor.stats.hp == 0:
+                return False
         actor.inventory.remove_item(self.item)
         self.item.x, self.item.y = actor.x, actor.y
         level.entities.add(self.item)
@@ -144,6 +149,9 @@ class WearAction(Action):
 
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
+        end_turn(actor, level, log)
+        if actor.stats.hp == 0:
+            return False
         actor.inventory.armor_slot = self.item
         self.item.identified = True
         log.append(f"You are now wearing {self.item}.")
@@ -174,6 +182,9 @@ class TakeOffAction(Action):
         if armor := actor.inventory.armor_slot:
             if armor.cursed:
                 log.append("You can't. It appears to be cursed.")
+                return False
+            end_turn(actor, level, log)
+            if actor.stats.hp == 0:
                 return False
             actor.inventory.armor_slot = None
             log.append(f"You used to be wearing {armor}.")
