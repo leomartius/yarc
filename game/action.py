@@ -137,6 +137,9 @@ class WieldAction(Action):
 
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert isinstance(actor, Player)
+        if self.item == actor.inventory.weapon_slot:
+            log.append("That's already in use.")
+            return False
         actor.inventory.weapon_slot = self.item
         log.append(f"You are now wielding {self.item}.")
         return True

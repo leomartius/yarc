@@ -49,8 +49,11 @@ armor_types = [
 ]
 
 weapon_types = [
-    ItemType(1, Glyph.WEAPON, 'dagger', Weapon(damage=6)),
-    ItemType(1, Glyph.WEAPON, 'long sword', Weapon(damage=10)),
+    ItemType(1, Glyph.WEAPON, "mace", Weapon(dmg_dice='2d4')),
+    ItemType(1, Glyph.WEAPON, "longsword", Weapon(dmg_dice='3d4')),
+    ItemType(1, Glyph.WEAPON, "dagger", Weapon(dmg_dice='1d6')),
+    ItemType(1, Glyph.WEAPON, "two-handed sword", Weapon(dmg_dice='4d4')),
+    ItemType(1, Glyph.WEAPON, "spear", Weapon(dmg_dice='2d3')),
 ]
 
 
@@ -68,7 +71,7 @@ item_categories = [
     ItemCategory(27, potion_types),
     ItemCategory(27, scroll_types),
     ItemCategory(8, armor_types),
-    ItemCategory(9, weapon_types),
+    ItemCategory(8, weapon_types),
 ]
 
 

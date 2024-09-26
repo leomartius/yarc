@@ -59,6 +59,12 @@ class ArmorItem(Item):
 class WeaponItem(Item):
     weapon: Weapon
 
+    def __str__(self) -> str:
+        if self.identified:
+            return f"a {self.weapon.plus_hit:+d},{self.weapon.plus_dmg:+d} {self.name}"
+        else:
+            return f"{article(self.name)} {self.name}"
+
 
 def article(noun: str) -> str:
     return "an" if noun[0] in 'aeiou' else "a"

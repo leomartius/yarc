@@ -74,6 +74,9 @@ class Play(State):
             case Command.READ:
                 return UseItem(glyph=Glyph.SCROLL)
             case Command.WIELD:
+                if player.inventory.weapon_slot and player.inventory.weapon_slot.cursed:
+                    log.append("You can't. It appears to be cursed.")
+                    return Play()
                 return UseItem(glyph=Glyph.WEAPON)
             case Command.WEAR:
                 if player.inventory.armor_slot:

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import InitVar, dataclass, field
 
-from game.dice import roll
+from game.dice import parse_dice, roll
 from game.entity import Actor, Player
 from game.level import Level
 from game.messages import MessageLog
@@ -41,14 +41,20 @@ class Armor:
         return self.base_ac - self.plus_ac
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(eq=False, slots=True, kw_only=True)
 class Weapon:
-    # weapon damage die
-    damage: int
+    # weapon damage dice
+    base_dmg: tuple[int, int] = field(init=False)
     # to hit bonus
     plus_hit: int = 0
     # damage bonus
     plus_dmg: int = 0
+
+    # damage dice expression
+    dmg_dice: InitVar[str]
+
+    def __post_init__(self, dmg_dice: str) -> None:
+        self.base_dmg = parse_dice(dmg_dice)
 
 
 def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog) -> None:
@@ -63,10 +69,11 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
     thac0 = 21 - attacker.stats.hd
     hit = roll(1, d=20) + to_hit_bonus >= thac0 - armor_class
     if hit:
-        damage_die = attacker.stats.dmg
+        damage_dice = 1, attacker.stats.dmg
         if isinstance(attacker, Player) and attacker.inventory.weapon_slot:
-            damage_die = attacker.inventory.weapon_slot.weapon.damage
-        damage = roll(1, d=damage_die) + damage_bonus
+            damage_dice = attacker.inventory.weapon_slot.weapon.base_dmg
+        damage = roll(*damage_dice) + damage_bonus
+        damage = max(0, damage)
         defender.stats.hp = max(0, defender.stats.hp - damage)
         log.append(f"You hit the {defender.name}." if isinstance(attacker, Player)
                    else f"The {attacker.name} hits you.")

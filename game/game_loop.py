@@ -26,8 +26,14 @@ def new_game() -> tuple[Player, Level, MessageLog]:
     )
     inventory.add_item(armor)
     inventory.armor_slot = armor
-    weapon = WeaponItem(x=0, y=0, glyph=Glyph.WEAPON, name='+1,+1 mace',
-                        weapon=Weapon(plus_hit=1, plus_dmg=1, damage=9))
+    weapon = WeaponItem(
+        x=0,
+        y=0,
+        glyph=Glyph.WEAPON,
+        name="mace",
+        weapon=Weapon(plus_hit=+1, plus_dmg=+1, dmg_dice='2d4'),
+        identified=True,
+    )
     inventory.add_item(weapon)
     inventory.weapon_slot = weapon
     player = Player(
