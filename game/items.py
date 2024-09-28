@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from game.combat import Armor, Weapon
 from game.constants import Glyph
-from game.consumable import Consumable, Healing, HoldMonster, NoEffect
+from game.consumable import Consumable, Healing, HoldMonster, NoEffect, RaiseLevel
 from game.entity import ArmorItem, Item, WeaponItem
 
 
@@ -32,6 +32,7 @@ potion_types = [
     ItemType(
         5, Glyph.POTION, "potion of extra healing", Healing(die=8, extra=True, message="You begin to feel much better.")
     ),
+    ItemType(2, Glyph.POTION, "potion of raise level", RaiseLevel()),
 ]
 
 scroll_types = [

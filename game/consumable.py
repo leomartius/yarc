@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from game.actor_ai import IdleAI
+from game.combat import level_up
 from game.dice import roll
 from game.entity import Actor
 from game.level import Level
@@ -37,6 +38,14 @@ class Healing(Consumable):
             actor.stats.max_hp += 1
             actor.stats.hp = actor.stats.max_hp
         log.append(self.message)
+
+
+@dataclass(frozen=True, slots=True)
+class RaiseLevel(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        actor.stats.xp = 5 * 2**actor.stats.hd + 1
+        log.append("You suddenly feel much more skillful.")
+        level_up(actor, log)
 
 
 @dataclass(frozen=True, slots=True)
