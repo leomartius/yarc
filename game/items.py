@@ -29,7 +29,9 @@ class ItemType:
 potion_types = [
     ItemType(1, Glyph.POTION, "potion of thirst quenching", NoEffect(message="This potion tastes extremely dull.")),
     ItemType(15, Glyph.POTION, "potion of healing", Healing(die=4, message="You begin to feel better.")),
-    ItemType(5, Glyph.POTION, "potion of extra healing", Healing(die=8, message="You begin to feel much better.")),
+    ItemType(
+        5, Glyph.POTION, "potion of extra healing", Healing(die=8, extra=True, message="You begin to feel much better.")
+    ),
 ]
 
 scroll_types = [

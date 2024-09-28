@@ -22,15 +22,18 @@ class NoEffect(Consumable):
         log.append(self.message)
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True, kw_only=True)
 class Healing(Consumable):
     die: int
+    extra: bool = False
     message: str
 
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
         heal = roll(actor.stats.hd, self.die)
         actor.stats.hp += heal
         if actor.stats.hp > actor.stats.max_hp:
+            if self.extra and actor.stats.hp > actor.stats.max_hp + actor.stats.hd + 1:
+                actor.stats.max_hp += 1
             actor.stats.max_hp += 1
             actor.stats.hp = actor.stats.max_hp
         log.append(self.message)
