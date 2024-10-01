@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import ClassVar
+
+import numpy as np
 
 from game.actor_ai import HostileAI, IdleAI
 from game.combat import level_up
@@ -112,3 +115,28 @@ class RemoveCurse(Consumable):
         if weapon := actor.inventory.weapon_slot:
             weapon.cursed = False
         log.append("You feel as if somebody is watching over you.")
+
+
+@dataclass(frozen=True, slots=True)
+class MagicMapping(Consumable):
+    revealed: ClassVar = np.array(
+        [
+            False,  # rock
+            True,  # top left corner
+            True,  # top right corner
+            True,  # bottom left corner
+            True,  # bottom right corner
+            True,  # horizontal wall
+            True,  # vertical wall
+            False,  # floor
+            True,  # passage
+            True,  # stairs
+            True,  # trap
+            True,  # door
+        ],
+        dtype=bool,
+    )
+
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        level.explored[:] |= MagicMapping.revealed[level.tiles]
+        log.append("Oh, now this scroll has a map on it.")

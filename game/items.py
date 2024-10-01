@@ -12,6 +12,7 @@ from game.consumable import (
     EnchantWeapon,
     Healing,
     HoldMonster,
+    MagicMapping,
     NoEffect,
     RaiseLevel,
     RemoveCurse,
@@ -52,6 +53,7 @@ scroll_types = [
     ItemType(10, Glyph.SCROLL, "scroll of enchant weapon", EnchantWeapon()),
     ItemType(8, Glyph.SCROLL, "scroll of remove curse", RemoveCurse()),
     ItemType(4, Glyph.SCROLL, "scroll of aggravate monsters", AggravateMonsters()),
+    ItemType(5, Glyph.SCROLL, "scroll of magic mapping", MagicMapping()),
 ]
 
 armor_types = [
