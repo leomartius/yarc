@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from game.actor_ai import IdleAI
 from game.combat import level_up
-from game.dice import roll
+from game.dice import percent, roll
 from game.entity import Actor, Player
 from game.level import Level
 from game.messages import MessageLog
@@ -75,5 +75,20 @@ class EnchantArmor(Consumable):
             armor.armor.plus_ac += 1
             armor.cursed = False
             log.append("Your armor glows faintly for a moment.")
+        else:
+            log.append("You feel a strange sense of loss.")
+
+
+@dataclass(frozen=True, slots=True)
+class EnchantWeapon(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        assert isinstance(actor, Player)
+        if weapon := actor.inventory.weapon_slot:
+            if percent(50):
+                weapon.weapon.plus_hit += 1
+            else:
+                weapon.weapon.plus_dmg += 1
+            weapon.cursed = False
+            log.append(f"Your {weapon.name} glows blue for a moment.")
         else:
             log.append("You feel a strange sense of loss.")
