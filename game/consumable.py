@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from game.actor_ai import IdleAI
+from game.actor_ai import HostileAI, IdleAI
 from game.combat import level_up
 from game.dice import percent, roll
 from game.entity import Actor, Player
@@ -65,6 +65,15 @@ class HoldMonster(Consumable):
                 log.append("The monster freezes.")
             case _:
                 log.append("The monsters around you freeze.")
+
+
+@dataclass(frozen=True, slots=True)
+class AggravateMonsters(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        for target in level.actors:
+            if target != actor:
+                target.ai = HostileAI()
+        log.append("You hear a high-pitched humming noise.")
 
 
 @dataclass(frozen=True, slots=True)

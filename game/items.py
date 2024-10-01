@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from game.combat import Armor, Weapon
 from game.constants import Glyph
 from game.consumable import (
+    AggravateMonsters,
     Consumable,
     EnchantArmor,
     EnchantWeapon,
@@ -50,6 +51,7 @@ scroll_types = [
     ItemType(8, Glyph.SCROLL, "scroll of enchant armor", EnchantArmor()),
     ItemType(10, Glyph.SCROLL, "scroll of enchant weapon", EnchantWeapon()),
     ItemType(8, Glyph.SCROLL, "scroll of remove curse", RemoveCurse()),
+    ItemType(4, Glyph.SCROLL, "scroll of aggravate monsters", AggravateMonsters()),
 ]
 
 armor_types = [
