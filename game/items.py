@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from game.combat import Armor, Weapon
 from game.constants import Glyph
-from game.consumable import Consumable, Healing, HoldMonster, NoEffect, RaiseLevel
+from game.consumable import Consumable, EnchantArmor, Healing, HoldMonster, NoEffect, RaiseLevel
 from game.entity import ArmorItem, Item, WeaponItem
 
 
@@ -38,6 +38,7 @@ potion_types = [
 scroll_types = [
     ItemType(1, Glyph.SCROLL, "scroll of blank paper", NoEffect(message="This scroll seems to be blank.")),
     ItemType(3, Glyph.SCROLL, "scroll of hold monster", HoldMonster()),
+    ItemType(8, Glyph.SCROLL, "scroll of enchant armor", EnchantArmor()),
 ]
 
 armor_types = [

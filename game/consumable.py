@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from game.actor_ai import IdleAI
 from game.combat import level_up
 from game.dice import roll
-from game.entity import Actor
+from game.entity import Actor, Player
 from game.level import Level
 from game.messages import MessageLog
 
@@ -65,3 +65,15 @@ class HoldMonster(Consumable):
                 log.append("The monster freezes.")
             case _:
                 log.append("The monsters around you freeze.")
+
+
+@dataclass(frozen=True, slots=True)
+class EnchantArmor(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        assert isinstance(actor, Player)
+        if armor := actor.inventory.armor_slot:
+            armor.armor.plus_ac += 1
+            armor.cursed = False
+            log.append("Your armor glows faintly for a moment.")
+        else:
+            log.append("You feel a strange sense of loss.")
