@@ -51,8 +51,17 @@ class RaiseLevel(Consumable):
 @dataclass(frozen=True, slots=True)
 class HoldMonster(Consumable):
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
-        targets_in_area = {target for target in level.actors
-                           if actor.x - 2 <= target.x <= actor.x + 2 and actor.y - 2 <= target.y <= actor.y + 2}
+        targets_in_area = {
+            target
+            for target in level.actors
+            if target != actor and actor.x - 2 <= target.x <= actor.x + 2 and actor.y - 2 <= target.y <= actor.y + 2
+        }
         for target in targets_in_area:
-            if target != actor:
-                target.ai = IdleAI()
+            target.ai = IdleAI()
+        match len(targets_in_area):
+            case 0:
+                log.append("You feel a strange sense of loss.")
+            case 1:
+                log.append("The monster freezes.")
+            case _:
+                log.append("The monsters around you freeze.")

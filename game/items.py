@@ -37,7 +37,7 @@ potion_types = [
 
 scroll_types = [
     ItemType(1, Glyph.SCROLL, "scroll of blank paper", NoEffect(message="This scroll seems to be blank.")),
-    ItemType(2, Glyph.SCROLL, "scroll of hold monster", HoldMonster()),
+    ItemType(3, Glyph.SCROLL, "scroll of hold monster", HoldMonster()),
 ]
 
 armor_types = [
@@ -72,7 +72,7 @@ class ItemCategory:
 
 item_categories = [
     ItemCategory(27, potion_types),
-    ItemCategory(27, scroll_types),
+    ItemCategory(30, scroll_types),
     ItemCategory(8, armor_types),
     ItemCategory(8, weapon_types),
 ]
