@@ -92,3 +92,14 @@ class EnchantWeapon(Consumable):
             log.append(f"Your {weapon.name} glows blue for a moment.")
         else:
             log.append("You feel a strange sense of loss.")
+
+
+@dataclass(frozen=True, slots=True)
+class RemoveCurse(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        assert isinstance(actor, Player)
+        if armor := actor.inventory.armor_slot:
+            armor.cursed = False
+        if weapon := actor.inventory.weapon_slot:
+            weapon.cursed = False
+        log.append("You feel as if somebody is watching over you.")
