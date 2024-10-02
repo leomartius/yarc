@@ -14,6 +14,7 @@ from game.level import Level
 from game.messages import MessageLog
 from game.render import screen_height, screen_width
 from game.save import load_game
+from game.strings import banner
 from game.version import version_string
 
 logger = logging.getLogger(__name__)
@@ -47,13 +48,23 @@ def main_menu(
     load_error = False
     while True:
         console.clear(fg=theme.default_fg, bg=theme.default_bg)
-        console.print(0, 1, "Yet Another Rogue Clone", fg=theme.default_fg)
-        console.print(1, 3, "n) Play a new game", fg=theme.default_fg)
-        console.print(1, 4, "c) Continue last game", fg=theme.default_fg)
-        console.print(1, 5, "q) Quit", fg=theme.default_fg)
+        y = 0
+
+        def center(text: str, skip_lines: int = 0) -> None:
+            nonlocal y
+            y += skip_lines
+            console.print(screen_width // 2, y, text, alignment=tcod.constants.CENTER)
+            y += 1
+
+        for line in banner:
+            center(line)
+        center("-= Yet Another Rogue Clone =-", 1)
+        center("Start (N)ew Game", 1)
+        center("(C)ontinue Saved Game")
+        center("(Q)uit")
         if load_error:
-            console.print(1, 7, "No saved game to load.", fg=theme.default_fg)
-        console.print(79, 23, version_string, fg=theme.default_fg, alignment=tcod.constants.RIGHT)
+            center("No saved game found.", 2)
+        console.print(screen_width - 1, screen_height - 1, version_string, alignment=tcod.constants.RIGHT)
         context.present(console, keep_aspect=True, integer_scaling=True, clear_color=theme.default_bg)
         for event in tcod.event.wait():
             if isinstance(event, tcod.event.Quit):
