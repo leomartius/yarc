@@ -9,6 +9,14 @@ event, it is built with Python 3.12 and the
 
 The source code is [available on GitHub](https://github.com/leomartius/yarc).
 
+## Status
+
+The game is currently in the pre-alpha stage of development, with many
+mechanics and much content still missing or incomplete. At this point, it’s
+not playable from start to finish.
+
+Expect save files to break between releases.
+
 ## License
 
 This project is licensed under the BSD 3-Clause License (see LICENSE.TXT for
