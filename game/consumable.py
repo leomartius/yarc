@@ -5,7 +5,7 @@ from typing import ClassVar
 
 import numpy as np
 
-from game.actor_ai import HostileAI, IdleAI
+from game.actor_ai import aggravate, pacify
 from game.combat import level_up
 from game.dice import percent, roll
 from game.entity import Actor, Player
@@ -60,7 +60,7 @@ class HoldMonster(Consumable):
             if target != actor and actor.x - 2 <= target.x <= actor.x + 2 and actor.y - 2 <= target.y <= actor.y + 2
         }
         for target in targets_in_area:
-            target.ai = IdleAI()
+            pacify(target)
         match len(targets_in_area):
             case 0:
                 log.append("You feel a strange sense of loss.")
@@ -75,7 +75,7 @@ class AggravateMonsters(Consumable):
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
         for target in level.actors:
             if target != actor:
-                target.ai = HostileAI()
+                aggravate(target)
         log.append("You hear a high-pitched humming noise.")
 
 

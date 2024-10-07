@@ -5,28 +5,47 @@ import logging
 from game.action import Action, MeleeAction, MoveAction, WaitAction
 from game.constants import Tile
 from game.dice import percent
-from game.entity import Actor
+from game.entity import Actor, Player
 from game.level import Level
 
 logger = logging.getLogger(__name__)
+
+
+def aggravate(actor: Actor) -> None:
+    assert not isinstance(actor, Player)
+    if not isinstance(actor.ai, HostileAI):
+        logger.debug("The %s turns hostile.", actor.name)
+        actor.ai = HostileAI()
+
+
+def pacify(actor: Actor) -> None:
+    assert not isinstance(actor, Player)
+    if not isinstance(actor.ai, IdleAI):
+        logger.debug("The %s turns idle.", actor.name)
+        actor.ai = IdleAI()
 
 
 class ActorAI:
     def take_turn(self, actor: Actor, level: Level, player: Actor) -> Action:
         raise NotImplementedError()
 
-    def attacked(self, actor: Actor, level: Level) -> None:
+    def on_attacked(self, actor: Actor) -> None:
+        aggravate(actor)
+
+    def on_disturbed(self, actor: Actor) -> None:
         pass
 
+    def is_helpless(self) -> bool:
+        raise NotImplementedError()
 
-# do not attack unless provoked
+
+# do nothing unless attacked
 class IdleAI(ActorAI):
     def take_turn(self, actor: Actor, level: Level, player: Actor) -> Action:
         return WaitAction()
 
-    def attacked(self, actor: Actor, level: Level) -> None:
-        logger.debug("The %s turns hostile.", actor.name)
-        actor.ai = HostileAI()
+    def is_helpless(self) -> bool:
+        return True
 
 
 # may turn hostile if the player is visible
@@ -34,13 +53,11 @@ class MeanAI(ActorAI):
     def take_turn(self, actor: Actor, level: Level, player: Actor) -> Action:
         if level.visible[actor.x, actor.y]:
             if percent(20):
-                logger.debug("The %s turns hostile.", actor.name)
-                actor.ai = HostileAI()
+                aggravate(actor)
         return WaitAction()
 
-    def attacked(self, actor: Actor, level: Level) -> None:
-        logger.debug("The %s turns hostile.", actor.name)
-        actor.ai = HostileAI()
+    def is_helpless(self) -> bool:
+        return True
 
 
 # chase and attack the player
@@ -92,3 +109,6 @@ class HostileAI(ActorAI):
                     if door:
                         return HostileAI._approach(actor, door[0], door[1], level)
         return HostileAI._approach(actor, player.x, player.y, level)
+
+    def is_helpless(self) -> bool:
+        return False

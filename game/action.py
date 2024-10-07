@@ -57,8 +57,6 @@ class MeleeAction(Action):
         if not level.is_connected(actor.x, actor.y, self.target.x, self.target.y):
             return False
         melee_attack(actor, self.target, level, log)
-        if self.target.ai:
-            self.target.ai.attacked(self.target, level)
         return True
 
 

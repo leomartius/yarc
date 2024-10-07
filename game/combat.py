@@ -66,6 +66,8 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
     armor_class = defender.stats.ac
     if isinstance(defender, Player) and defender.inventory.armor_slot:
         armor_class = defender.inventory.armor_slot.armor.ac
+    if defender.ai:
+        defender.ai.on_attacked(defender)
     thac0 = 21 - attacker.stats.hd
     hit = roll(1, d=20) + to_hit_bonus >= thac0 - armor_class
     if hit:
