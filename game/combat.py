@@ -63,6 +63,8 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
     if isinstance(attacker, Player) and attacker.inventory.weapon_slot:
         to_hit_bonus += attacker.inventory.weapon_slot.weapon.plus_hit
         damage_bonus += attacker.inventory.weapon_slot.weapon.plus_dmg
+    if defender.ai and defender.ai.is_helpless():
+        to_hit_bonus += 4
     armor_class = defender.stats.ac
     if isinstance(defender, Player) and defender.inventory.armor_slot:
         armor_class = defender.inventory.armor_slot.armor.ac
