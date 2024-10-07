@@ -23,8 +23,7 @@ logger = logging.getLogger(__name__)
 def show_menu(datadir: Path, savefile: Path, theme_name: str, borderless: bool, scale_factor: int) -> Never:
     logger.info("Starting main UI initialization.")
     if os.name == 'nt':
-        from ctypes import cdll
-        cdll.sdl2.SDL_SetHint(b'SDL_WINDOWS_DPI_AWARENESS', b'system')
+        tcod.lib.SDL_SetHint(b'SDL_WINDOWS_DPI_AWARENESS', b'system')
     logger.debug(f"Loading theme: {theme_name}")
     theme: game.theme.Theme = getattr(game.theme, theme_name)
     tileset = theme.load_tileset(datadir)
