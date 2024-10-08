@@ -56,6 +56,13 @@ class Level:
         assert len(items_at_xy) <= 1
         return items_at_xy.pop() if items_at_xy else None
 
+    def get_room_at(self, x: int, y: int) -> tuple[int, int, int, int] | None:
+        assert self.in_bounds(x, y)
+        for x1, y1, x2, y2 in self.rooms:
+            if x1 <= x <= x2 and y1 <= y <= y2:
+                return x1, y1, x2, y2
+        return None
+
     def update_fov(self, x: int, y: int) -> None:
         self.visible[:] = False
 

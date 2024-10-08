@@ -16,6 +16,7 @@ from game.render import map_height, map_width
 from game.save import save_game
 from game.state import GameOver, Play, State
 from game.theme import Theme
+from game.turn import wake_up_room
 
 
 def new_game() -> tuple[Player, Level, MessageLog]:
@@ -46,6 +47,7 @@ def new_game() -> tuple[Player, Level, MessageLog]:
         inventory=inventory,
     )
     level.entities.add(player)
+    wake_up_room(level.get_room_at(player.x, player.y), level)
     level.update_fov(player.x, player.y)
     log = MessageLog()
     log.append("Welcome to the Dungeons of Doom! Press '?' for a list of available commands.")
@@ -69,4 +71,5 @@ def game_loop(context: tcod.context.Context, console: tcod.Console, theme: Theme
                 level = generate_level(map_width, map_height, level.depth + 1)
                 player.x, player.y = level.entry_x, level.entry_y
                 level.entities.add(player)
+                wake_up_room(level.get_room_at(player.x, player.y), level)
                 level.update_fov(player.x, player.y)

@@ -4,7 +4,7 @@ import logging
 
 from game.action import Action, MeleeAction, MoveAction, WaitAction
 from game.constants import Tile
-from game.dice import percent
+from game.dice import roll
 from game.entity import Actor, Player
 from game.level import Level
 
@@ -48,13 +48,14 @@ class IdleAI(ActorAI):
         return True
 
 
-# may turn hostile if the player is visible
+# possibly turn hostile if disturbed
 class MeanAI(ActorAI):
     def take_turn(self, actor: Actor, level: Level, player: Actor) -> Action:
-        if level.visible[actor.x, actor.y]:
-            if percent(20):
-                aggravate(actor)
         return WaitAction()
+
+    def on_disturbed(self, actor: Actor) -> None:
+        if roll(1, d=3) > 1:
+            aggravate(actor)
 
     def is_helpless(self) -> bool:
         return True

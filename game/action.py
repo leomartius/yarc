@@ -5,7 +5,7 @@ from game.constants import Glyph
 from game.entity import Actor, ArmorItem, Item, Player, WeaponItem
 from game.level import Level
 from game.messages import MessageLog
-from game.turn import end_turn
+from game.turn import end_turn, wake_up_room
 
 
 class Action:
@@ -20,13 +20,17 @@ class MoveAction(Action):
 
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         assert level.in_bounds(actor.x + self.dx, actor.y + self.dy)
+        old_room = level.get_room_at(actor.x, actor.y)
         new_x, new_y = actor.x + self.dx, actor.y + self.dy
         if not level.is_walkable(new_x, new_y):
             return False
         if not level.is_connected(actor.x, actor.y, new_x, new_y):
             return False
         actor.x, actor.y = new_x, new_y
+        new_room = level.get_room_at(actor.x, actor.y)
         if isinstance(actor, Player):
+            if old_room != new_room:
+                wake_up_room(old_room or new_room, level)
             self._auto_pickup(actor, level, log)
         return True
 
