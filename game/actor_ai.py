@@ -6,7 +6,7 @@ import random
 from game.action import Action, MeleeAction, MoveAction, WaitAction
 from game.constants import Tile
 from game.dice import roll
-from game.entity import Actor, Player
+from game.entity import Actor, Item, Player
 from game.level import Level
 
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class ActorAI:
     def on_attacked(self, actor: Actor) -> None:
         aggravate(actor)
 
-    def on_disturbed(self, actor: Actor) -> None:
+    def on_disturbed(self, actor: Actor, level: Level) -> None:
         pass
 
     def is_helpless(self) -> bool:
@@ -54,12 +54,48 @@ class MeanAI(ActorAI):
     def take_turn(self, actor: Actor, level: Level, player: Actor) -> Action:
         return WaitAction()
 
-    def on_disturbed(self, actor: Actor) -> None:
+    def on_disturbed(self, actor: Actor, level: Level) -> None:
         if roll(1, d=3) > 1:
             aggravate(actor)
 
     def is_helpless(self) -> bool:
         return True
+
+
+# run towards gold if possible
+class GreedyAI(ActorAI):
+    goal: Item | None = None
+
+    def take_turn(self, actor: Actor, level: Level, player: Actor) -> Action:
+        if self.goal is None:
+            return WaitAction()
+        elif self.goal not in level.entities:
+            aggravate(actor)
+            assert actor.ai
+            return actor.ai.take_turn(actor, level, player)
+        else:
+            assert (actor.x, actor.y) != (self.goal.x, self.goal.y)
+            action = _approach(actor, self.goal.x, self.goal.y, level)
+            if isinstance(action, MoveAction):
+                if (actor.x + action.dx, actor.y + action.dy) == (self.goal.x, self.goal.y):
+                    pacify(actor)
+            return action
+
+    def on_disturbed(self, actor: Actor, level: Level) -> None:
+        if self.goal is None:
+            room = level.get_room_at(actor.x, actor.y)
+            assert room is not None
+            x1, y1, x2, y2 = room
+            for item in level.items:
+                if item.gold and x1 < item.x < x2 and y1 < item.y < y2:
+                    logger.debug("The %s starts running toward a pile of gold.", actor.name)
+                    self.goal = item
+                    return
+            else:
+                aggravate(actor)
+
+    def is_helpless(self) -> bool:
+        return self.goal is None
 
 
 # chase and attack the player

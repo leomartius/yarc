@@ -40,6 +40,10 @@ class Level:
     def actors(self) -> set[Actor]:
         return {entity for entity in self.entities if isinstance(entity, Actor)}
 
+    @property
+    def items(self) -> set[Item]:
+        return {entity for entity in self.entities if isinstance(entity, Item)}
+
     def get_entities_at(self, x: int, y: int) -> set[Entity]:
         assert self.in_bounds(x, y)
         return {entity for entity in self.entities if entity.x == x and entity.y == y}

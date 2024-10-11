@@ -11,7 +11,7 @@ def wake_up_room(room: tuple[int, int, int, int] | None, level: Level) -> None:
     actors_in_room = {actor for actor in level.actors if actor.ai and x1 <= actor.x <= x2 and y1 <= actor.y <= y2}
     for actor in actors_in_room:
         assert actor.ai is not None
-        actor.ai.on_disturbed(actor)
+        actor.ai.on_disturbed(actor, level)
 
 
 def end_turn(player: Player, level: Level, log: MessageLog) -> None:
@@ -22,4 +22,4 @@ def end_turn(player: Player, level: Level, log: MessageLog) -> None:
                 break
             actor.ai.take_turn(actor, level, player).perform(actor, level, log)
             if actor.x - 1 <= player.x <= actor.x + 1 and actor.y - 1 <= player.y <= actor.y + 1:
-                actor.ai.on_disturbed(actor)
+                actor.ai.on_disturbed(actor, level)

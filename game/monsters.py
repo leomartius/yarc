@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass
 
-from game.actor_ai import ActorAI, IdleAI, MeanAI
+from game.actor_ai import ActorAI, GreedyAI, IdleAI, MeanAI
 from game.combat import Stats
 from game.constants import Glyph
 from game.dice import roll
@@ -34,7 +34,7 @@ monsters: list[MonsterType] = [
     MonsterType('H', 'hobgoblin', hd=1, ac=5, dmg=8, xp_value=3),
     NotImplemented,  # E floating eye
     NotImplemented,  # A giant ant
-    MonsterType('O', 'orc', hd=1, ac=6, dmg=8, xp_value=5),
+    MonsterType('O', 'orc', hd=1, ac=6, dmg=8, xp_value=5, ai=GreedyAI),
     MonsterType('Z', 'zombie', hd=2, ac=8, dmg=8, xp_value=7),
     MonsterType('G', 'gnome', hd=1, ac=5, dmg=6, xp_value=8, ai=IdleAI),
     NotImplemented,  # L leprechaun
