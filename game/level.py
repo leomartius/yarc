@@ -19,6 +19,10 @@ class Level:
         self.stairs_x, self.stairs_y = 0, 0
         self.completed = False
 
+    @property
+    def walkable(self) -> np.ndarray[tuple[int, int], np.dtype[np.bool]]:
+        return self.tiles >= Tile.MIN_WALKABLE
+
     def in_bounds(self, x: int, y: int) -> bool:
         return 0 <= x < self.width and 0 <= y < self.height
 
