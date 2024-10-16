@@ -57,7 +57,32 @@ monsters: list[MonsterType] = [
 ]
 
 
-def eligible_monsters(depth: int) -> list[MonsterType]:
-    min_level = max(1, min(depth - 5, len(monsters) - 4))
-    max_level = max(5, min(depth + 4, len(monsters)))
-    return [m for m in monsters[min_level - 1:max_level] if m.generate]
+def get_monster_types(depth: int) -> tuple[list[MonsterType], list[int]]:
+    items = []
+    weights = []
+    for i, weight in enumerate(_weights(depth)):
+        if weight > 0 and monsters[i].generate:
+            items.append(monsters[i])
+            weights.append(weight)
+    return items, weights
+
+
+def _weights(depth: int) -> list[int]:
+    assert depth >= 1
+    weights = [0] * 26
+    under = 0
+    over = 0
+    for i in range(depth - 6, depth + 4):
+        if i < 0:
+            under += 10
+        elif i >= len(weights):
+            over += 10
+        else:
+            weights[i] += 10
+    for i in range(0, 5):
+        weights[i] += under // 5
+    for i in range(21, 26):
+        weights[i] += over // 5
+    assert len(weights) == 26
+    assert sum(weights) == 100
+    return weights

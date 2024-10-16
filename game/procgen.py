@@ -7,7 +7,7 @@ from game.constants import Glyph, Tile
 from game.entity import ArmorItem, Item, WeaponItem
 from game.items import get_item_categories
 from game.level import Level
-from game.monsters import eligible_monsters
+from game.monsters import get_monster_types
 
 # hardcoded 80x22 subdivision
 H_GRID = [0, 26, 27, 53, 54, 80]
@@ -247,8 +247,9 @@ def place_gold(room: Room, level: Level) -> None:
 
 def place_monster(room: Room, level: Level) -> None:
     x, y = find_empty_spot_in_room(room, level)
-    m_type = rng.choice(eligible_monsters(level.depth))
-    monster = m_type.spawn(x, y)
+    monster_types, weights = get_monster_types(level.depth)
+    monster_type = rng.choices(monster_types, weights).pop()
+    monster = monster_type.spawn(x, y)
     level.entities.add(monster)
 
 
