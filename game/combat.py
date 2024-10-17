@@ -8,7 +8,7 @@ from game.level import Level
 from game.messages import MessageLog
 
 
-@dataclass(slots=True)
+@dataclass(eq=False, slots=True, kw_only=True)
 class Stats:
     # current hit points
     hp: int = field(init=False)
@@ -18,15 +18,19 @@ class Stats:
     ac: int
     # hit dice (character level)
     hd: int
-    # damage die (unarmed strike)
-    dmg: int
+    # damage dice (unarmed strike)
+    base_dmg: tuple[int, int] = field(init=False)
     # xp value (current experience)
     xp: int
     # strength
     strength: int = 10
 
-    def __post_init__(self) -> None:
+    # damage dice expression
+    dmg_dice: InitVar[str]
+
+    def __post_init__(self, dmg_dice: str) -> None:
         self.hp = self.max_hp
+        self.base_dmg = parse_dice(dmg_dice)
 
 
 @dataclass(eq=False, slots=True, kw_only=True)
@@ -73,7 +77,7 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
     thac0 = 21 - attacker.stats.hd
     hit = roll(1, d=20) + to_hit_bonus >= thac0 - armor_class
     if hit:
-        damage_dice = 1, attacker.stats.dmg
+        damage_dice = attacker.stats.base_dmg
         if isinstance(attacker, Player) and attacker.inventory.weapon_slot:
             damage_dice = attacker.inventory.weapon_slot.weapon.base_dmg
         damage = roll(*damage_dice) + damage_bonus

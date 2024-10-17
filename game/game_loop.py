@@ -42,7 +42,7 @@ def new_game() -> tuple[Player, Level, MessageLog]:
         y=level.entry_y,
         glyph=Glyph.PLAYER,
         name="Rodney",
-        stats=Stats(max_hp=12, ac=10, hd=1, dmg=4, xp=0, strength=16),
+        stats=Stats(max_hp=12, ac=10, hd=1, dmg_dice='1d4', xp=0, strength=16),
         gold=0,
         inventory=inventory,
     )
