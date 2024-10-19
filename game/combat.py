@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from dataclasses import InitVar, dataclass, field
 
 from game.dice import parse_dice, roll
@@ -83,12 +84,11 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
         damage = roll(*damage_dice) + damage_bonus
         damage = max(0, damage)
         defender.stats.hp = max(0, defender.stats.hp - damage)
-        log.append(f"You hit the {defender.name}." if isinstance(attacker, Player)
-                   else f"The {attacker.name} hits you.")
+        log.append(hit_message(attacker, defender))
         if defender.stats.hp == 0:
             level.entities.remove(defender)
             if isinstance(attacker, Player):
-                log.append(f"You have defeated the {defender.name}.")
+                log.append(f"You defeat the {defender.name}.")
                 attacker.stats.xp += defender.stats.xp
                 level_up(attacker, log)
             else:
@@ -96,8 +96,21 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
                 defender.cause_of_death = attacker.name
                 log.append("You die...")
     else:
-        log.append(f"You miss the {defender.name}." if isinstance(attacker, Player)
-                   else f"The {attacker.name} misses you.")
+        log.append(miss_message(attacker, defender))
+
+
+def hit_message(attacker: Actor, defender: Actor) -> str:
+    if isinstance(attacker, Player):
+        return random.choice(you_hit).format(defender.name)
+    else:
+        return random.choice(it_hits).format(attacker.name)
+
+
+def miss_message(attacker: Actor, defender: Actor) -> str:
+    if isinstance(attacker, Player):
+        return random.choice(you_miss).format(defender.name)
+    else:
+        return random.choice(it_misses).format(attacker.name)
 
 
 def strength_bonuses(actor: Actor) -> tuple[int, int]:
@@ -121,3 +134,32 @@ def level_up(player: Actor, log: MessageLog) -> None:
         player.stats.max_hp += hp_gain
         player.stats.hp += hp_gain
         player.stats.hd = level
+
+
+you_hit = [
+    "You hit the {}.",
+    "You swing and hit the {}.",
+    "You score an excellent hit on the {}.",
+    "You injure the {}.",
+]
+
+it_hits = [
+    "The {} hits you.",
+    "The {} swings and hits you.",
+    "The {} scores an excellent hit on you.",
+    "The {} injures you.",
+]
+
+you_miss = [
+    "You miss the {}.",
+    "You swing and miss the {}.",
+    "You barely miss the {}.",
+    "You don't hit the {}.",
+]
+
+it_misses = [
+    "The {} misses you.",
+    "The {} swings and misses you.",
+    "The {} barely misses you.",
+    "The {} doesn't hit you.",
+]
