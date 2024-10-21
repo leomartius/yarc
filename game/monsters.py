@@ -32,6 +32,15 @@ class MonsterType:
         stats.hd += extra_hd
         stats.ac -= extra_hd
         stats.hp = stats.max_hp = roll(stats.hd, d=8)
+        if stats.hd > 9:
+            bonus_xp = (stats.max_hp // 6) * 20
+        elif stats.hd > 6:
+            bonus_xp = (stats.max_hp // 6) * 4
+        elif stats.hd > 1:
+            bonus_xp = stats.max_hp // 6
+        else:
+            bonus_xp = stats.max_hp // 8
+        stats.xp += bonus_xp + extra_hd * 10
         return Actor(x=x, y=y, glyph=Glyph.MONSTER, char=self.ch, name=self.name, stats=stats, ai=self.ai())
 
 
