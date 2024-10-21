@@ -27,8 +27,10 @@ class MonsterType:
     def __post_init__(self, hd: int, ac: int, dmg_dice: str, xp_value: int) -> None:
         object.__setattr__(self, 'stats', Stats(max_hp=0, hd=hd, ac=ac, dmg_dice=dmg_dice, xp=xp_value))
 
-    def spawn(self, x: int, y: int) -> Actor:
+    def spawn(self, x: int, y: int, extra_hd: int) -> Actor:
         stats = deepcopy(self.stats)
+        stats.hd += extra_hd
+        stats.ac -= extra_hd
         stats.hp = stats.max_hp = roll(stats.hd, d=8)
         return Actor(x=x, y=y, glyph=Glyph.MONSTER, char=self.ch, name=self.name, stats=stats, ai=self.ai())
 

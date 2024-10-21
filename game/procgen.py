@@ -247,9 +247,10 @@ def place_gold(room: Room, level: Level) -> None:
 
 def place_monster(room: Room, level: Level) -> None:
     x, y = find_empty_spot_in_room(room, level)
+    extra_hd = max(0, level.depth - 26)
     monster_types, weights = get_monster_types(level.depth)
     monster_type = rng.choices(monster_types, weights).pop()
-    monster = monster_type.spawn(x, y)
+    monster = monster_type.spawn(x, y, extra_hd)
     level.entities.add(monster)
 
 
