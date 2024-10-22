@@ -20,7 +20,7 @@ class Stats:
     # hit dice (character level)
     hd: int
     # damage dice (unarmed strike)
-    base_dmg: tuple[int, int] = field(init=False)
+    base_dmg: list[tuple[int, int]] = field(init=False)
     # xp value (current experience)
     xp: int
     # strength
@@ -49,7 +49,7 @@ class Armor:
 @dataclass(eq=False, slots=True, kw_only=True)
 class Weapon:
     # weapon damage dice
-    base_dmg: tuple[int, int] = field(init=False)
+    base_dmg: list[tuple[int, int]] = field(init=False)
     # to hit bonus
     plus_hit: int = 0
     # damage bonus
@@ -64,8 +64,10 @@ class Weapon:
 
 def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog) -> None:
     assert isinstance(attacker, Player) != isinstance(defender, Player)
+    damage_dice = attacker.stats.base_dmg
     to_hit_bonus, damage_bonus = strength_bonuses(attacker)
     if isinstance(attacker, Player) and attacker.inventory.weapon_slot:
+        damage_dice = attacker.inventory.weapon_slot.weapon.base_dmg
         to_hit_bonus += attacker.inventory.weapon_slot.weapon.plus_hit
         damage_bonus += attacker.inventory.weapon_slot.weapon.plus_dmg
     if defender.ai and defender.ai.is_helpless():
@@ -75,15 +77,17 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
         armor_class = defender.inventory.armor_slot.armor.ac
     if defender.ai:
         defender.ai.on_attacked(defender)
-    thac0 = 21 - attacker.stats.hd
-    hit = roll(1, d=20) + to_hit_bonus >= thac0 - armor_class
-    if hit:
-        damage_dice = attacker.stats.base_dmg
-        if isinstance(attacker, Player) and attacker.inventory.weapon_slot:
-            damage_dice = attacker.inventory.weapon_slot.weapon.base_dmg
-        damage = roll(*damage_dice) + damage_bonus
-        damage = max(0, damage)
-        defender.stats.hp = max(0, defender.stats.hp - damage)
+    action_hit = False
+    action_dmg = 0
+    for n, d in damage_dice:
+        thac0 = 21 - attacker.stats.hd
+        attack_hit = roll(1, d=20) + to_hit_bonus >= thac0 - armor_class
+        if attack_hit:
+            attack_dmg = roll(n, d) + damage_bonus
+            action_dmg += max(0, attack_dmg)
+            action_hit = True
+    if action_hit:
+        defender.stats.hp = max(0, defender.stats.hp - action_dmg)
         log.append(hit_message(attacker, defender))
         if defender.stats.hp == 0:
             level.entities.remove(defender)
