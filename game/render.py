@@ -35,7 +35,8 @@ def render_map(console: tcod.Console, level: Level, offset_y: int, theme: Theme)
         if level.visible[entity.x, entity.y]:
             if isinstance(entity, Actor) and entity.glyph == Glyph.MONSTER:
                 assert entity.char is not None
-                console.print(entity.x, entity.y + offset_y, entity.char, fg=theme.monster_fg)
+                if not entity.invisible:
+                    console.print(entity.x, entity.y + offset_y, entity.char, fg=theme.monster_fg)
             else:
                 char, foreground = theme.entity_glyphs[entity.glyph]
                 console.print(entity.x, entity.y + offset_y, char, fg=foreground)

@@ -17,6 +17,7 @@ class MonsterType:
     _: KW_ONLY
     stats: Stats = field(init=False)
     erratic: int | None = None
+    invis: bool = False
     ai: type[ActorAI] = MeanAI
     generate: bool = True
 
@@ -43,7 +44,15 @@ class MonsterType:
             bonus_xp = stats.max_hp // 8
         stats.xp += bonus_xp + extra_hd * 10
         return Actor(
-            x=x, y=y, glyph=Glyph.MONSTER, char=self.ch, name=self.name, stats=stats, erratic=self.erratic, ai=self.ai()
+            x=x,
+            y=y,
+            glyph=Glyph.MONSTER,
+            char=self.ch,
+            name=self.name,
+            stats=stats,
+            erratic=self.erratic,
+            invisible=self.invis,
+            ai=self.ai(),
         )
 
 
@@ -67,7 +76,7 @@ monsters: list[MonsterType] = [
     MonsterType('T', "troll", hd=6, ac=4, dmg_dice='1d8/1d8/2d6', xp_value=120),
     MonsterType('W', "wraith", hd=5, ac=4, dmg_dice='1d6', xp_value=55, ai=IdleAI),
     MonsterType('F', "violet fungi", hd=8, ac=3, dmg_dice='0d0', xp_value=80, generate=False),
-    MonsterType('I', "invisible stalker", hd=8, ac=3, dmg_dice='4d4', xp_value=120, erratic=20, ai=IdleAI, generate=False),
+    MonsterType('I', "invisible stalker", hd=8, ac=3, dmg_dice='4d4', xp_value=120, erratic=20, invis=True, ai=IdleAI),
     MonsterType('X', "xorn", hd=7, ac=-2, dmg_dice='1d3/1d3/1d3/4d6', xp_value=190),
     MonsterType('U', "umber hulk", hd=8, ac=2, dmg_dice='3d4/3d4/2d5', xp_value=200),
     MonsterType('M', "mimic", hd=7, ac=7, dmg_dice='3d4', xp_value=100, ai=IdleAI, generate=False),
