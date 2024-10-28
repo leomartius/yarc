@@ -24,6 +24,7 @@ class Actor(Entity):
     char: str | None = None
     stats: Stats
     ai: ActorAI | None = None
+    erratic: int | None = None
 
 
 @dataclass(eq=False, slots=True, kw_only=True)

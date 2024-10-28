@@ -5,7 +5,7 @@ import random
 
 import numpy as np
 
-from game.action import Action, MeleeAction, MoveAction, WaitAction
+from game.action import Action, BumpAction, WaitAction
 from game.constants import Tile
 from game.dice import roll
 from game.entity import Actor, Item, Player
@@ -79,7 +79,8 @@ class GreedyAI(ActorAI):
         else:
             assert (actor.x, actor.y) != (self.goal.x, self.goal.y)
             action = _approach(actor, self.goal.x, self.goal.y, level)
-            if isinstance(action, MoveAction):
+            if isinstance(action, BumpAction):
+                assert not actor.erratic
                 if (actor.x + action.dx, actor.y + action.dy) == (self.goal.x, self.goal.y):
                     pacify(actor)
             return action
@@ -107,7 +108,7 @@ class HostileAI(ActorAI):
         # attack the player if possible
         if -1 <= player.x - actor.x <= +1 and -1 <= player.y - actor.y <= +1:
             if level.is_connected(actor.x, actor.y, player.x, player.y):
-                return MeleeAction(player)
+                return BumpAction(player.x - actor.x, player.y - actor.y)
         # move toward the player if in the same room
         if room := level.get_room_at(actor.x, actor.y):
             x1, y1, x2, y2 = room
@@ -160,7 +161,7 @@ def _approach(actor: Actor, goal_x: int, goal_y: int, level: Level) -> Action:
         return WaitAction()
     else:
         dest_x, dest_y = random.choice(destinations)
-        return MoveAction(dest_x - actor.x, dest_y - actor.y)
+        return BumpAction(dest_x - actor.x, dest_y - actor.y)
 
 
 # Find a path to the destination using the A* algorithm.

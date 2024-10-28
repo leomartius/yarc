@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import random
+
 from game.combat import melee_attack
 from game.constants import Glyph
+from game.dice import percent
 from game.entity import Actor, ArmorItem, Item, Player, WeaponItem
 from game.level import Level
 from game.messages import MessageLog
@@ -78,12 +81,36 @@ class BumpAction(Action):
             action = MeleeAction(target)
         else:
             action = MoveAction(self.dx, self.dy)
+        if actor.erratic and percent(actor.erratic):
+            action = ConfusedAction()
         return action.perform(actor, level, log)
 
 
 class WaitAction(Action):
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
         return True
+
+
+class ConfusedAction(Action):
+    def perform(self, actor: Actor, level: Level, log: MessageLog) -> bool:
+        action: Action
+        dx, dy = random.randint(-1, +1), random.randint(-1, +1)
+        dest_x, dest_y = actor.x + dx, actor.y + dy
+        if (
+            (dx, dy) == (0, 0)
+            or not level.in_bounds(dest_x, dest_y)
+            or not level.is_walkable(dest_x, dest_y)
+            or not level.is_connected(actor.x, actor.y, dest_x, dest_y)
+        ):
+            action = WaitAction()
+        elif target := level.get_actor_at(dest_x, dest_y):
+            if isinstance(actor, Player) or isinstance(target, Player):
+                action = MeleeAction(target)
+            else:
+                action = WaitAction()
+        else:
+            action = MoveAction(dx, dy)
+        return action.perform(actor, level, log)
 
 
 class StairsAction(Action):
