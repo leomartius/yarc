@@ -25,6 +25,8 @@ class Stats:
     xp: int
     # strength
     strength: int = 10
+    # maximum strength
+    max_strength: int = field(init=False)
 
     # damage dice expression
     dmg_dice: InitVar[str]
@@ -32,6 +34,7 @@ class Stats:
     def __post_init__(self, dmg_dice: str) -> None:
         self.hp = self.max_hp
         self.base_dmg = parse_dice(dmg_dice)
+        self.max_strength = self.strength
 
 
 @dataclass(eq=False, slots=True, kw_only=True)
@@ -118,12 +121,29 @@ def miss_message(attacker: Actor, defender: Actor) -> str:
 
 
 def strength_bonuses(actor: Actor) -> tuple[int, int]:
-    if actor.stats.strength == 16:
-        assert isinstance(actor, Player)
-        return 0, 1
-    else:
-        assert not isinstance(actor, Player) and actor.stats.strength == 10
-        return 0, 0
+    assert 3 <= actor.stats.strength <= 31
+    match actor.stats.strength:
+        case 31:
+            return +3, +6
+        case x if 22 <= x <= 30:
+            return +2, +5
+        case 21:
+            return +2, +4
+        case 20:
+            return +2, +3
+        case 19:
+            return +1, +3
+        case 18:
+            return +1, +2
+        case 17:
+            return +1, +1
+        case 16:
+            return 0, +1
+        case x if 7 <= x <= 15:
+            return 0, 0
+        case x:
+            assert 3 <= x <= 6
+            return x - 7, x - 7
 
 
 def level_up(player: Actor, log: MessageLog) -> None:

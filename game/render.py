@@ -48,8 +48,14 @@ def render_status(console: tcod.Console, player: Player, level: Level, offset_y:
         ac = player.inventory.armor_slot.armor.ac
     else:
         ac = player.stats.ac
-    status_line = (f"Level: {level.depth}  Gold: {player.gold}  "
-                   f"Hp: {s.hp}({s.max_hp})  Str: {s.strength}  Ac: {ac}  Exp: {s.hd}/{s.xp}")
+    status_line = (
+        f"Level: {level.depth}  "
+        f"Gold: {player.gold}  "
+        f"Hp: {s.hp}({s.max_hp})  "
+        f"Str: {s.strength}({s.max_strength})  "
+        f"Ac: {ac}  "
+        f"Exp: {s.hd}/{s.xp}  "
+    )
     console.print(0, offset_y, status_line, fg=theme.status_fg)
 
 

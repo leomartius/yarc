@@ -44,6 +44,31 @@ class Healing(Consumable):
 
 
 @dataclass(frozen=True, slots=True)
+class Poison(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        strength_damage = roll(1, d=3)
+        actor.stats.strength = max(3, actor.stats.strength - strength_damage)
+        log.append("You feel very sick now.")
+
+
+@dataclass(frozen=True, slots=True)
+class GainStrength(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        actor.stats.strength = min(31, actor.stats.strength + 1)
+        if actor.stats.strength >= actor.stats.max_strength:
+            actor.stats.max_strength = actor.stats.strength
+        log.append("You feel stronger now. What bulging muscles!")
+
+
+@dataclass(frozen=True, slots=True)
+class RestoreStrength(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        if actor.stats.strength < actor.stats.max_strength:
+            actor.stats.strength = actor.stats.max_strength
+        log.append("Hey, this tastes great. It makes you feel warm all over.")
+
+
+@dataclass(frozen=True, slots=True)
 class RaiseLevel(Consumable):
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
         actor.stats.xp = 5 * 2**actor.stats.hd + 1

@@ -10,12 +10,15 @@ from game.consumable import (
     Consumable,
     EnchantArmor,
     EnchantWeapon,
+    GainStrength,
     Healing,
     HoldMonster,
     MagicMapping,
     NoEffect,
+    Poison,
     RaiseLevel,
     RemoveCurse,
+    RestoreStrength,
 )
 from game.entity import ArmorItem, Item, WeaponItem
 
@@ -44,6 +47,9 @@ potion_types = [
         5, Glyph.POTION, "potion of extra healing", Healing(die=8, extra=True, message="You begin to feel much better.")
     ),
     ItemType(2, Glyph.POTION, "potion of raise level", RaiseLevel()),
+    ItemType(8, Glyph.POTION, "potion of poison", Poison()),
+    ItemType(15, Glyph.POTION, "potion of gain strength", GainStrength()),
+    ItemType(14, Glyph.POTION, "potion of restore strength", RestoreStrength()),
 ]
 
 scroll_types = [
