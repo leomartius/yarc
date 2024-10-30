@@ -148,6 +148,11 @@ def strength_bonuses(actor: Actor) -> tuple[int, int]:
             return x - 7, x - 7
 
 
+def save_vs_poison(actor: Actor) -> bool:
+    target = 14 - actor.stats.hd // 2
+    return roll(1, d=20) >= target
+
+
 def level_up(player: Actor, log: MessageLog) -> None:
     level = 1
     threshold = 10
