@@ -4,6 +4,7 @@ from copy import deepcopy
 from dataclasses import KW_ONLY, InitVar, dataclass, field
 
 from game.actor_ai import ActorAI, GreedyAI, IdleAI, MeanAI
+from game.attack import Attack
 from game.combat import Stats
 from game.constants import Glyph
 from game.dice import roll
@@ -18,6 +19,7 @@ class MonsterType:
     stats: Stats = field(init=False)
     erratic: int | None = None
     invis: bool = False
+    special: Attack | None = None
     ai: type[ActorAI] = MeanAI
     generate: bool = True
 
@@ -52,6 +54,7 @@ class MonsterType:
             stats=stats,
             erratic=self.erratic,
             invisible=self.invis,
+            special_attack=self.special,
             ai=self.ai(),
         )
 

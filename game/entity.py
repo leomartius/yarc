@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from game.actor_ai import ActorAI
+    from game.attack import Attack
     from game.combat import Armor, Stats, Weapon
     from game.constants import Glyph
     from game.consumable import Consumable
@@ -24,6 +25,7 @@ class Actor(Entity):
     char: str | None = None
     stats: Stats
     ai: ActorAI | None = None
+    special_attack: Attack | None = None
     erratic: int | None = None
     invisible: bool = False
 
