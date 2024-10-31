@@ -153,6 +153,11 @@ def save_vs_poison(actor: Actor) -> bool:
     return roll(1, d=20) >= target
 
 
+def save_vs_magic(actor: Actor) -> bool:
+    target = 17 - actor.stats.hd // 2
+    return roll(1, d=20) >= target
+
+
 def level_up(player: Actor, log: MessageLog) -> None:
     level = 1
     threshold = 10
