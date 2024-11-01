@@ -32,3 +32,13 @@ class StealGold(Attack):
             target.gold = max(0, target.gold - stolen_gold)
             log.append("Your purse feels lighter.")
         level.entities.remove(actor)
+
+
+@dataclass(frozen=True, slots=True)
+class Corrode(Attack):
+    def apply(self, actor: Actor, target: Actor, level: Level, log: MessageLog) -> None:
+        assert isinstance(target, Player)
+        worn_armor = target.inventory.armor_slot
+        if worn_armor and worn_armor.armor.ac < 9 and worn_armor.armor.base_ac < 8:
+            worn_armor.armor.plus_ac -= 1
+            log.append("Your armor appears to be weaker now. Oh, my!")

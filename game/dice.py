@@ -5,7 +5,7 @@ import re
 
 
 def roll(n: int, d: int) -> int:
-    assert n > 0 and d > 0
+    assert (n > 0 and d > 0) or (n == 0 and d == 0)
     total = 0
     for _ in range(n):
         total += random.randint(1, d)
