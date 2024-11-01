@@ -101,7 +101,6 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
             else:
                 assert isinstance(defender, Player)
                 defender.cause_of_death = attacker.name
-                log.append("You die...")
         elif attacker.special_attack:
             attacker.special_attack.apply(attacker, defender, level, log)
     else:

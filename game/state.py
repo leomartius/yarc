@@ -97,7 +97,7 @@ def do_action(action: Action, player: Player, level: Level, log: MessageLog) -> 
     if end_turn:
         game.turn.end_turn(player, level, log)
     if player.stats.hp == 0:
-        assert log.unread > 0
+        log.append("You die...")
         return More()
     if log.unread > message_lines:
         return More()
