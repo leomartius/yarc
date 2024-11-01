@@ -4,7 +4,7 @@ from copy import deepcopy
 from dataclasses import KW_ONLY, InitVar, dataclass, field
 
 from game.actor_ai import ActorAI, GreedyAI, IdleAI, MeanAI
-from game.attack import Attack, Corrode, Poison, StealGold, StealItem
+from game.attack import Attack, Corrode, DrainHealth, Poison, StealGold, StealItem
 from game.combat import Stats
 from game.constants import Glyph
 from game.dice import roll
@@ -83,7 +83,7 @@ monsters: list[MonsterType] = [
     MonsterType('X', "xorn", hd=7, ac=-2, dmg_dice='1d3/1d3/1d3/4d6', xp_value=190),
     MonsterType('U', "umber hulk", hd=8, ac=2, dmg_dice='3d4/3d4/2d5', xp_value=200),
     MonsterType('M', "mimic", hd=7, ac=7, dmg_dice='3d4', xp_value=100, ai=IdleAI, generate=False),
-    MonsterType('V', "vampire", hd=8, ac=1, dmg_dice='1d10', xp_value=350),
+    MonsterType('V', "vampire", hd=8, ac=1, dmg_dice='1d10', xp_value=350, special=DrainHealth()),
     MonsterType('P', "purple worm", hd=15, ac=6, dmg_dice='2d12/2d4', xp_value=4000, ai=IdleAI),
     MonsterType('D', "dragon", hd=10, ac=-1, dmg_dice='1d8/1d8/3d10', xp_value=6800),
 ]

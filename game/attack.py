@@ -4,7 +4,7 @@ import random
 from dataclasses import dataclass
 
 from game.combat import save_vs_magic, save_vs_poison
-from game.dice import roll
+from game.dice import percent, roll
 from game.entity import Actor, Player, is_magic
 from game.level import Level
 from game.messages import MessageLog
@@ -55,3 +55,24 @@ class StealItem(Attack):
             target.inventory.remove_item(item)
             log.append(f"She stole {item}!")
             level.entities.remove(actor)
+
+
+@dataclass(frozen=True, slots=True)
+class DrainHealth(Attack):
+    def apply(self, actor: Actor, target: Actor, level: Level, log: MessageLog) -> None:
+        if percent(30):
+            hp_drain = roll(1, d=5)
+            _do_drain(hp_drain, actor, target, log)
+
+
+def _do_drain(hp_drain: int, actor: Actor, target: Actor, log: MessageLog) -> None:
+    assert isinstance(target, Player)
+    target.stats.max_hp -= hp_drain
+    target.stats.hp -= hp_drain
+    if target.stats.max_hp < 1:
+        target.stats.max_hp = 0
+        target.stats.hp = 0
+        target.cause_of_death = actor.name
+    elif target.stats.hp < 1:
+        target.stats.hp = 1
+    log.append("You suddenly feel weaker.")
