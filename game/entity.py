@@ -3,11 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from game.constants import Glyph
+
 if TYPE_CHECKING:
     from game.actor_ai import ActorAI
     from game.attack import Attack
     from game.combat import Armor, Stats, Weapon
-    from game.constants import Glyph
     from game.consumable import Consumable
     from game.inventory import Inventory
 
@@ -72,3 +73,17 @@ class WeaponItem(Item):
 
 def article(noun: str) -> str:
     return "an" if noun[0] in 'aeiou' else "a"
+
+
+def is_magic(item: Item) -> bool:
+    match item.glyph:
+        case Glyph.POTION | Glyph.SCROLL | Glyph.RING | Glyph.WAND | Glyph.AMULET:
+            return True
+        case Glyph.ARMOR:
+            assert isinstance(item, ArmorItem)
+            return item.armor.plus_ac != 0
+        case Glyph.WEAPON:
+            assert isinstance(item, WeaponItem)
+            return item.weapon.plus_hit != 0 or item.weapon.plus_dmg != 0
+        case _:
+            return False
