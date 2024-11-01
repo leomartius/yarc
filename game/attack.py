@@ -65,6 +65,24 @@ class DrainHealth(Attack):
             _do_drain(hp_drain, actor, target, log)
 
 
+@dataclass(frozen=True, slots=True)
+class DrainLevel(Attack):
+    def apply(self, actor: Actor, target: Actor, level: Level, log: MessageLog) -> None:
+        if percent(15):
+            if target.stats.xp == 0:
+                target.stats.max_hp = 0
+            elif target.stats.hd == 1:
+                target.stats.xp = 0
+            elif target.stats.hd == 2:
+                target.stats.hd = 1
+                target.stats.xp = 1
+            else:
+                target.stats.hd -= 1
+                target.stats.xp = 2 ** (target.stats.hd - 2) * 10 + 1
+            hp_drain = roll(1, d=10)
+            _do_drain(hp_drain, actor, target, log)
+
+
 def _do_drain(hp_drain: int, actor: Actor, target: Actor, log: MessageLog) -> None:
     assert isinstance(target, Player)
     target.stats.max_hp -= hp_drain

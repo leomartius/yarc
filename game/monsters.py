@@ -4,7 +4,7 @@ from copy import deepcopy
 from dataclasses import KW_ONLY, InitVar, dataclass, field
 
 from game.actor_ai import ActorAI, GreedyAI, IdleAI, MeanAI
-from game.attack import Attack, Corrode, DrainHealth, Poison, StealGold, StealItem
+from game.attack import Attack, Corrode, DrainHealth, DrainLevel, Poison, StealGold, StealItem
 from game.combat import Stats
 from game.constants import Glyph
 from game.dice import roll
@@ -77,7 +77,7 @@ monsters: list[MonsterType] = [
     MonsterType('N', "nymph", hd=3, ac=9, dmg_dice='0d0', xp_value=37, special=StealItem(), ai=IdleAI),
     MonsterType('Y', "yeti", hd=4, ac=6, dmg_dice='1d6/1d6', xp_value=50, ai=IdleAI),
     MonsterType('T', "troll", hd=6, ac=4, dmg_dice='1d8/1d8/2d6', xp_value=120),
-    MonsterType('W', "wraith", hd=5, ac=4, dmg_dice='1d6', xp_value=55, ai=IdleAI),
+    MonsterType('W', "wraith", hd=5, ac=4, dmg_dice='1d6', xp_value=55, special=DrainLevel(), ai=IdleAI),
     MonsterType('F', "violet fungi", hd=8, ac=3, dmg_dice='0d0', xp_value=80, generate=False),
     MonsterType('I', "invisible stalker", hd=8, ac=3, dmg_dice='4d4', xp_value=120, erratic=20, invis=True, ai=IdleAI),
     MonsterType('X', "xorn", hd=7, ac=-2, dmg_dice='1d3/1d3/1d3/4d6', xp_value=190),
