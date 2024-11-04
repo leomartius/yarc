@@ -18,30 +18,53 @@ class SaveFile:
     player: Player
     level: Level
     log: MessageLog
-    signature: str
-
-
-SIGNATURE = 'YARC:0.2.0'
 
 
 def save_game(filename: Path, player: Player, level: Level, log: MessageLog) -> None:
-    savefile = SaveFile(player, level, log, SIGNATURE)
-    content = lzma.compress(pickle.dumps(savefile))
-    filename.write_bytes(content)
-    logger.info("Savegame saved successfully: %s.", filename)
+    savefile = SaveFile(player, level, log)
+    _save(filename, savefile)
+    logger.info("Savegame saved successfully: '%s'", filename)
 
 
 def load_game(filename: Path) -> tuple[Player, Level, MessageLog] | None:
-    try:
-        content = filename.read_bytes()
-        savefile = pickle.loads(lzma.decompress(content))
-    except FileNotFoundError:
-        logger.debug("Savegame file not found: %s.", filename)
-        return None
-    if isinstance(savefile, SaveFile):
-        if savefile.signature == SIGNATURE:
-            logger.info("Savegame loaded successfully: %s.", filename)
-            filename.unlink()
-            return savefile.player, savefile.level, savefile.log
-    logger.debug("Incompatible savegame file: %s.", filename)
+    savefile = _load(filename)
+    if savefile:
+        logger.info("Savegame loaded successfully: '%s'", filename)
+        filename.unlink()
+        return savefile.player, savefile.level, savefile.log
     return None
+
+
+HEADER = b'YARC\0\2\0\0'
+assert len(HEADER) == 8
+
+
+def _save(filename: Path, savefile: SaveFile) -> None:
+    serialized = pickle.dumps(savefile)
+    compressed = lzma.compress(serialized)
+    with filename.open('wb') as f:
+        f.write(HEADER)
+        f.write(compressed)
+
+
+def _load(filename: Path) -> SaveFile | None:
+    try:
+        with filename.open('rb') as f:
+            header = f.read(len(HEADER))
+            if header != HEADER:
+                logger.debug("Incompatible savegame file: '%s' (wrong header)", filename)
+                return None
+            content = f.read()
+    except FileNotFoundError:
+        logger.debug("Savegame file not found: '%s'", filename)
+        return None
+    except OSError as e:
+        logger.warning("Unable to open file: '%s'", filename, exc_info=e)
+        return None
+    try:
+        savefile = pickle.loads(lzma.decompress(content))
+        assert isinstance(savefile, SaveFile)
+        return savefile
+    except Exception as e:
+        logger.error("Incompatible savegame file: '%s'", filename, exc_info=e)
+        return None
