@@ -114,15 +114,15 @@ class HostileAI(ActorAI):
             x1, y1, x2, y2 = room
             if x1 <= player.x <= x2 and y1 <= player.y <= y2:
                 return _approach(actor, player.x, player.y, level)
-        # if inside a room, move toward the exit door
-        if level.tiles[actor.x, actor.y] == Tile.FLOOR:
-            path = _path_to(actor, player.x, player.y, level)
-            for x, y in path:
-                if level.tiles[x, y] == Tile.DOOR:
-                    door = x, y
-                    break
-            assert door
-            return _approach(actor, door[0], door[1], level)
+            # if inside a room, move toward the exit door
+            if x1 < actor.x < x2 and y1 < actor.y < y2:
+                path = _path_to(actor, player.x, player.y, level)
+                for x, y in path:
+                    if level.tiles[x, y] == Tile.DOOR:
+                        door = x, y
+                        break
+                assert door
+                return _approach(actor, door[0], door[1], level)
         # otherwise, find a path to the player
         path = _path_to(actor, player.x, player.y, level)
         assert len(path) > 2
