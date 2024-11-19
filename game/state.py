@@ -93,19 +93,22 @@ class Play(State):
 
 
 def do_action(action: Action, player: Player, level: Level, log: MessageLog) -> State:
-    end_turn = action.perform(player, level, log)
+    end_turn, next_state = action.perform(player, level, log)
     if end_turn:
         game.turn.end_turn(player, level, log)
     if player.stats.hp == 0:
         log.append("You die...")
-        return More()
+        next_state = GameOver()
+    if next_state:
+        return More(next_state=next_state)
     if log.unread > message_lines:
         return More()
     return Play()
 
 
 class More(State):
-    def __init__(self) -> None:
+    def __init__(self, next_state: State | None = None) -> None:
+        self.next_state = next_state
         self.messages: list[str] | None = None
 
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
@@ -118,11 +121,11 @@ class More(State):
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         if is_continue(event):
-            if player.stats.hp == 0:
+            if self.next_state:
                 if log.unread > 0:
-                    return More()
+                    return More(self.next_state)
                 else:
-                    return GameOver()
+                    return self.next_state
             if log.unread > message_lines:
                 return More()
             else:
