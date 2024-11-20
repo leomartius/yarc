@@ -198,11 +198,27 @@ class WearAction(Action):
         return ActionResult(True)
 
 
+class IdentifyAction(Action):
+    def __init__(self, item: Item):
+        self.item = item
+
+    def perform(self, actor: Actor, level: Level, log: MessageLog) -> ActionResult:
+        assert isinstance(actor, Player)
+        self.item.identified = True
+        log.append(f"{self.item}{actor.inventory.str_equipped(self.item)}.".capitalize())
+        return ActionResult(True)
+
+
 class UseAction(Action):
     def __init__(self, item: Item):
         self.item = item
 
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> ActionResult:
+        import game.consumable
+        if isinstance(self.item.consumable, game.consumable.Identify):
+            self.item.consumable.use(actor, level, log)
+            import game.state
+            return ActionResult(next_state=game.state.IdentifyItem(self.item))
         action: Action
         if self.item.glyph == Glyph.WEAPON:
             action = WieldAction(self.item)

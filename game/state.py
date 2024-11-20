@@ -3,9 +3,18 @@ from __future__ import annotations
 import tcod
 
 import game.turn
-from game.action import Action, BumpAction, DropAction, StairsAction, TakeOffAction, UseAction, WaitAction
+from game.action import (
+    Action,
+    BumpAction,
+    DropAction,
+    IdentifyAction,
+    StairsAction,
+    TakeOffAction,
+    UseAction,
+    WaitAction,
+)
 from game.constants import Glyph
-from game.entity import Player
+from game.entity import Item, Player
 from game.input import Command, MoveCommand, handle_play_event, is_cancel, is_continue, to_index
 from game.level import Level
 from game.messages import MessageLog
@@ -223,4 +232,22 @@ class UseItem(State):
                 if item.glyph == self.glyph:
                     action = UseAction(item)
                     return do_action(action, player, level, log)
+        return self
+
+
+class IdentifyItem(State):
+    def __init__(self, scroll: Item):
+        self.scroll = scroll
+
+    def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
+        render_inventory(console, player.inventory, theme)
+
+    def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
+        assert len(player.inventory.items) > 0
+        index = to_index(event, max_l=ord('a') + len(player.inventory.items) - 1)
+        if index is not None:
+            item = player.inventory.items[index]
+            action = IdentifyAction(item)
+            player.inventory.remove_item(self.scroll)
+            return do_action(action, player, level, log)
         return self

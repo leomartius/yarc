@@ -165,3 +165,10 @@ class MagicMapping(Consumable):
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
         level.explored[:] |= MagicMapping.revealed[level.tiles]
         log.append("Oh, now this scroll has a map on it.")
+
+
+@dataclass(frozen=True, slots=True)
+class Identify(Consumable):
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        # This consumable is special-cased in UseAction. The actual logic is in IdentifyAction.
+        log.append("This is an identify scroll.")

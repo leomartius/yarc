@@ -13,6 +13,7 @@ from game.consumable import (
     GainStrength,
     Healing,
     HoldMonster,
+    Identify,
     MagicMapping,
     NoEffect,
     Poison,
@@ -60,6 +61,7 @@ scroll_types = [
     ItemType(8, Glyph.SCROLL, "scroll of remove curse", RemoveCurse()),
     ItemType(4, Glyph.SCROLL, "scroll of aggravate monsters", AggravateMonsters()),
     ItemType(5, Glyph.SCROLL, "scroll of magic mapping", MagicMapping()),
+    ItemType(27, Glyph.SCROLL, "scroll of identify", Identify()),
 ]
 
 armor_types = [
