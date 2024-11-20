@@ -139,5 +139,6 @@ def fullscreen_wait_prompt(console: tcod.Console, theme: Theme) -> None:
     console.print(0, screen_height - 1, "--Press space to continue--", fg=theme.default_fg)
 
 
-def fullscreen_cancel_prompt(console: tcod.Console, theme: Theme) -> None:
-    console.print(0, screen_height - 1, "--Press Esc to cancel--", fg=theme.default_fg)
+def fullscreen_select_prompt(console: tcod.Console, verb: str, theme: Theme, *, escape: bool = True) -> None:
+    cancel_prompt = ", or press Esc to cancel" if escape else ""
+    console.print(0, screen_height - 1, f"--Select an item to {verb}{cancel_prompt}--")

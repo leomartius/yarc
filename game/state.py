@@ -19,7 +19,7 @@ from game.input import Command, MoveCommand, handle_play_event, is_cancel, is_co
 from game.level import Level
 from game.messages import MessageLog
 from game.render import (
-    fullscreen_cancel_prompt,
+    fullscreen_select_prompt,
     fullscreen_wait_prompt,
     map_height,
     message_lines,
@@ -79,19 +79,19 @@ class Play(State):
             case Command.DROP:
                 return DropItem()
             case Command.QUAFF:
-                return UseItem(glyph=Glyph.POTION)
+                return UseItem(glyph=Glyph.POTION, verb="quaff")
             case Command.READ:
-                return UseItem(glyph=Glyph.SCROLL)
+                return UseItem(glyph=Glyph.SCROLL, verb="read")
             case Command.WIELD:
                 if player.inventory.weapon_slot and player.inventory.weapon_slot.cursed:
                     log.append("You can't. It appears to be cursed.")
                     return Play()
-                return UseItem(glyph=Glyph.WEAPON)
+                return UseItem(glyph=Glyph.WEAPON, verb="wield")
             case Command.WEAR:
                 if player.inventory.armor_slot:
                     log.append("You are already wearing some. You'll have to take it off first.")
                     return Play()
-                return UseItem(glyph=Glyph.ARMOR)
+                return UseItem(glyph=Glyph.ARMOR, verb="wear")
             case Command.TAKEOFF:
                 action = TakeOffAction()
                 return do_action(action, player, level, log)
@@ -200,7 +200,7 @@ class HelpScreen(State):
 class DropItem(State):
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
         render_inventory(console, player.inventory, theme)
-        fullscreen_cancel_prompt(console, theme)
+        fullscreen_select_prompt(console, "drop", theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         if is_cancel(event):
@@ -215,12 +215,13 @@ class DropItem(State):
 
 
 class UseItem(State):
-    def __init__(self, glyph: Glyph):
+    def __init__(self, glyph: Glyph, verb: str):
         self.glyph = glyph
+        self.verb = verb
 
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
         render_inventory(console, player.inventory, theme, filter_by_glyph=self.glyph)
-        fullscreen_cancel_prompt(console, theme)
+        fullscreen_select_prompt(console, self.verb, theme)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         if is_cancel(event):
@@ -241,6 +242,7 @@ class IdentifyItem(State):
 
     def render(self, console: tcod.Console, player: Player, level: Level, log: MessageLog, theme: Theme) -> None:
         render_inventory(console, player.inventory, theme)
+        fullscreen_select_prompt(console, "identify", theme, escape=False)
 
     def event(self, event: tcod.event.Event, player: Player, level: Level, log: MessageLog) -> State:
         assert len(player.inventory.items) > 0
