@@ -47,3 +47,11 @@ class Inventory:
     def is_equipped(self, item: Item) -> bool:
         assert item in self.items
         return item in (self.armor_slot, self.weapon_slot)
+
+    def str_equipped(self, item: Item) -> str:
+        if item is self.armor_slot:
+            return " (being worn)"
+        elif item is self.weapon_slot:
+            return " (weapon in hand)"
+        else:
+            return ""

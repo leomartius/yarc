@@ -72,13 +72,7 @@ def render_inventory(console: tcod.Console, inventory: Inventory, theme: Theme, 
     letter = ord('a')
     for item in inventory.items:
         if filter_by_glyph is False or item.glyph == filter_by_glyph:
-            if item is inventory.weapon_slot:
-                equipped = " (weapon in hand)"
-            elif item is inventory.armor_slot:
-                equipped = " (being worn)"
-            else:
-                equipped = ''
-            console.print(0, y, f"{chr(letter)}) {item}{equipped}", fg=theme.default_fg)
+            console.print(0, y, f"{chr(letter)}) {item}{inventory.str_equipped(item)}")
             y += 1
         letter += 1
     if y == 0:
