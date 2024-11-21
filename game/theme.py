@@ -27,7 +27,7 @@ class Theme:
 
 
 default = Theme(
-    tileset=('vga-9x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437),
+    tileset=('vga-8x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437),
     default_fg=(0xAA, 0xAA, 0xAA),
     default_bg=(0x00, 0x00, 0x00),
     status_fg=(0xAA, 0xAA, 0xAA),
