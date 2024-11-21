@@ -40,6 +40,10 @@ class Level:
             # when moving diagonally, you can't cut corners
             return self.is_walkable(x1, y2) and self.is_walkable(x2, y1)
 
+    def get_tile_at(self, x: int, y: int) -> Tile:
+        assert self.in_bounds(x, y)
+        return Tile(self.tiles[x, y])
+
     @property
     def actors(self) -> set[Actor]:
         return {entity for entity in self.entities if isinstance(entity, Actor)}

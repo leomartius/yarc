@@ -4,7 +4,7 @@ import random
 from typing import TYPE_CHECKING, NamedTuple, Protocol
 
 from game.combat import melee_attack
-from game.constants import Glyph
+from game.constants import Glyph, Tile
 from game.dice import percent
 from game.entity import Actor, ArmorItem, Item, Player, WeaponItem
 from game.level import Level
@@ -138,7 +138,7 @@ class DropAction(Action):
 
     def perform(self, actor: Actor, level: Level, log: MessageLog) -> ActionResult:
         assert isinstance(actor, Player)
-        if level.get_item_at(actor.x, actor.y):
+        if level.get_tile_at(actor.x, actor.y) not in (Tile.FLOOR, Tile.PASSAGE) or level.get_item_at(actor.x, actor.y):
             log.append("There is something there already.")
             return ActionResult(False)
         if self.item.cursed and actor.inventory.is_equipped(self.item):
