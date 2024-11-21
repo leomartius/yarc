@@ -22,12 +22,12 @@ help_text = r"""
 
     .    or    5     rest for a turn
 
-
     ?    show help screen
     /    show symbol key
     m    message log
     i    inventory
     d    drop object
+    ,    pick object up
     q    quaff potion
     r    read scroll
     w    wield a weapon

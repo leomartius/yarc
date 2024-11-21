@@ -20,6 +20,7 @@ class Command(Enum):
     INVENTORY = auto()
     HELP = auto()
     DROP = auto()
+    PICKUP = auto()
     QUAFF = auto()
     READ = auto()
     WIELD = auto()
@@ -61,6 +62,7 @@ MOVE_KEYS = {
 COMMAND_KEYS = {
     tcod.event.KeySym.KP_5: Command.WAIT,
     tcod.event.KeySym.PERIOD: Command.WAIT,
+    tcod.event.KeySym.COMMA: Command.PICKUP,
 
     tcod.event.KeySym.m: Command.MESSAGES,
     tcod.event.KeySym.i: Command.INVENTORY,

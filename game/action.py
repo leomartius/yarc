@@ -155,6 +155,23 @@ class DropAction(Action):
         return ActionResult(True)
 
 
+class PickUpAction(Action):
+    def perform(self, actor: Actor, level: Level, log: MessageLog) -> ActionResult:
+        assert isinstance(actor, Player)
+        item_on_floor = level.get_item_at(actor.x, actor.y)
+        if not item_on_floor:
+            log.append("You are not standing on any object.")
+            return ActionResult(False)
+        assert item_on_floor.gold is None
+        if actor.inventory.add_item(item_on_floor):
+            level.entities.remove(item_on_floor)
+            log.append(f"You now have {item_on_floor}.")
+            return ActionResult(True)
+        else:
+            log.append("There's no room in your pack.")
+            return ActionResult(False)
+
+
 class ConsumeAction(Action):
     def __init__(self, item: Item):
         self.item = item

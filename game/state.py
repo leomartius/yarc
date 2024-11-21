@@ -8,6 +8,7 @@ from game.action import (
     BumpAction,
     DropAction,
     IdentifyAction,
+    PickUpAction,
     StairsAction,
     TakeOffAction,
     UseAction,
@@ -78,6 +79,9 @@ class Play(State):
                 return HelpScreen()
             case Command.DROP:
                 return DropItem()
+            case Command.PICKUP:
+                action = PickUpAction()
+                return do_action(action, player, level, log)
             case Command.QUAFF:
                 return UseItem(glyph=Glyph.POTION, verb="quaff")
             case Command.READ:
