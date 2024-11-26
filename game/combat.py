@@ -67,6 +67,7 @@ class Weapon:
 
 def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog) -> None:
     assert isinstance(attacker, Player) != isinstance(defender, Player)
+    reset_heal_counter(attacker, defender)
     damage_dice = attacker.stats.base_dmg
     to_hit_bonus, damage_bonus = strength_bonuses(attacker)
     if isinstance(attacker, Player) and attacker.inventory.weapon_slot:
@@ -105,6 +106,13 @@ def melee_attack(attacker: Actor, defender: Actor, level: Level, log: MessageLog
             attacker.special_attack.apply(attacker, defender, level, log)
     else:
         log.append(miss_message(attacker, defender))
+
+
+def reset_heal_counter(attacker: Actor, defender: Actor) -> None:
+    if isinstance(attacker, Player):
+        attacker.heal_counter = 0
+    if isinstance(defender, Player):
+        defender.heal_counter = 0
 
 
 def hit_message(attacker: Actor, defender: Actor) -> str:

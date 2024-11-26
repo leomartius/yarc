@@ -35,7 +35,7 @@ def load_game(filename: Path) -> tuple[Player, Level, MessageLog] | None:
     return None
 
 
-HEADER = b'YARC\0\2\0\1'
+HEADER = b'YARC\0\2\0\2'
 assert len(HEADER) == 8
 
 

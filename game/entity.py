@@ -35,6 +35,7 @@ class Actor(Entity):
 class Player(Actor):
     gold: int
     inventory: Inventory
+    heal_counter: int = 0
     cause_of_death: str | None = None
 
 
