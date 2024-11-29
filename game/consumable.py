@@ -172,3 +172,23 @@ class Identify(Consumable):
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
         # This consumable is special-cased in UseAction. The actual logic is in IdentifyAction.
         log.append("This is an identify scroll.")
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Food(Consumable):
+    spoilable: bool
+
+    def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
+        assert isinstance(actor, Player)
+        actor.hunger_clock = max(actor.hunger_clock, 0)
+        actor.hunger_clock += 1099 + roll(1, d=400)
+        actor.hunger_clock = min(actor.hunger_clock, 2000)
+        if self.spoilable:
+            if percent(70):
+                log.append("Yum, that tasted good.")
+            else:
+                actor.stats.xp += 1
+                log.append("Yuk, this food tastes awful.")
+                level_up(actor, log)
+        else:
+            log.append("My, that was a yummy slime mold.")

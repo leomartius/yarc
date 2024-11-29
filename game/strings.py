@@ -13,7 +13,6 @@ banner = """\
 """.splitlines()
 
 help_text = r"""
-
   y k u      7 8 9
    \|/        \|/
   h- -l  or  4- -6   move or melee
@@ -30,6 +29,7 @@ help_text = r"""
     ,    pick object up
     q    quaff potion
     r    read scroll
+    e    eat food
     w    wield a weapon
     W    wear armor
     T    take armor off

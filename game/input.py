@@ -23,6 +23,7 @@ class Command(Enum):
     PICKUP = auto()
     QUAFF = auto()
     READ = auto()
+    EAT = auto()
     WIELD = auto()
     WEAR = auto()
     TAKEOFF = auto()
@@ -69,6 +70,7 @@ COMMAND_KEYS = {
     tcod.event.KeySym.d: Command.DROP,
     tcod.event.KeySym.q: Command.QUAFF,
     tcod.event.KeySym.r: Command.READ,
+    tcod.event.KeySym.e: Command.EAT,
     tcod.event.KeySym.w: Command.WIELD,
     tcod.event.KeySym.v: Command.VERSION,
 

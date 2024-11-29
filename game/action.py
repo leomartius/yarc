@@ -241,10 +241,8 @@ class UseAction(Action):
             action = WieldAction(self.item)
         elif self.item.glyph == Glyph.ARMOR:
             action = WearAction(self.item)
-        elif self.item.glyph == Glyph.SCROLL:
-            action = ConsumeAction(self.item)
         else:
-            assert self.item.glyph == Glyph.POTION
+            assert self.item.glyph in (Glyph.FOOD, Glyph.POTION, Glyph.SCROLL)
             action = ConsumeAction(self.item)
         return action.perform(actor, level, log)
 

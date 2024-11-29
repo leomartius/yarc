@@ -48,6 +48,8 @@ def render_status(console: tcod.Console, player: Player, level: Level, offset_y:
         ac = player.inventory.armor_slot.armor.ac
     else:
         ac = player.stats.ac
+    nutrition = player.hunger_clock
+    hunger = "Faint" if nutrition < 0 else "Weak" if nutrition < 150 else "Hungry" if nutrition < 300 else ""
     status_line = (
         f"Level: {level.depth}  "
         f"Gold: {player.gold}  "
@@ -55,6 +57,7 @@ def render_status(console: tcod.Console, player: Player, level: Level, offset_y:
         f"Str: {s.strength}({s.max_strength})  "
         f"Ac: {ac}  "
         f"Exp: {s.hd}/{s.xp}  "
+        f"{hunger}  "
     )
     console.print(0, offset_y, status_line, fg=theme.status_fg)
 
@@ -127,6 +130,8 @@ def render_tombstone(console: tcod.Console, player: Player, theme: Theme) -> Non
         y += 1
     assert player.cause_of_death is not None
     killed_by = f"killed by {article(player.cause_of_death)}"
+    if player.cause_of_death == "starvation":
+        killed_by = "killed by"
     console.print(19, offset_y + 6, f"{player.name}".center(18), fg=theme.default_fg)
     console.print(19, offset_y + 7, f"{player.gold} Au".center(18), fg=theme.default_fg)
     console.print(19, offset_y + 8, killed_by.center(18), fg=theme.default_fg)

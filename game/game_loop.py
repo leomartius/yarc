@@ -7,7 +7,8 @@ import tcod
 
 from game.combat import Armor, Stats, Weapon
 from game.constants import Glyph
-from game.entity import ArmorItem, Player, WeaponItem
+from game.consumable import Food
+from game.entity import ArmorItem, Item, Player, WeaponItem
 from game.inventory import Inventory
 from game.level import Level
 from game.messages import MessageLog
@@ -22,6 +23,8 @@ from game.turn import wake_up_room
 def new_game() -> tuple[Player, Level, MessageLog]:
     level = generate_level(map_width, map_height, 1)
     inventory = Inventory()
+    food = Item(x=0, y=0, glyph=Glyph.FOOD, name="ration of food", consumable=Food(spoilable=True))
+    inventory.add_item(food)
     armor = ArmorItem(
         x=0, y=0, glyph=Glyph.ARMOR, name="ring mail", armor=Armor(base_ac=7, plus_ac=+1), identified=True
     )
@@ -45,6 +48,7 @@ def new_game() -> tuple[Player, Level, MessageLog]:
         stats=Stats(max_hp=12, ac=10, hd=1, dmg_dice='1d4', xp=0, strength=16),
         gold=0,
         inventory=inventory,
+        hunger_clock=1300,
     )
     level.entities.add(player)
     wake_up_room(level.get_room_at(player.x, player.y), level)

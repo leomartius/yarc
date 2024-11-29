@@ -10,6 +10,7 @@ from game.consumable import (
     Consumable,
     EnchantArmor,
     EnchantWeapon,
+    Food,
     GainStrength,
     Healing,
     HoldMonster,
@@ -83,6 +84,11 @@ weapon_types = [
     ItemType(1, Glyph.WEAPON, "spear", Weapon(dmg_dice='2d3')),
 ]
 
+food_types = [
+    ItemType(9, Glyph.FOOD, "ration of food", Food(spoilable=True)),
+    ItemType(1, Glyph.FOOD, "slime mold", Food(spoilable=False)),
+]
+
 
 @dataclass(frozen=True, slots=True)
 class ItemCategory:
@@ -99,6 +105,7 @@ item_categories = [
     ItemCategory(30, scroll_types),
     ItemCategory(8, armor_types),
     ItemCategory(8, weapon_types),
+    ItemCategory(17, food_types),
 ]
 
 

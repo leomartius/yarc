@@ -86,6 +86,8 @@ class Play(State):
                 return UseItem(glyph=Glyph.POTION, verb="quaff")
             case Command.READ:
                 return UseItem(glyph=Glyph.SCROLL, verb="read")
+            case Command.EAT:
+                return UseItem(glyph=Glyph.FOOD, verb="eat")
             case Command.WIELD:
                 if player.inventory.weapon_slot and player.inventory.weapon_slot.cursed:
                     log.append("You can't. It appears to be cursed.")

@@ -18,6 +18,7 @@ def wake_up_room(room: tuple[int, int, int, int] | None, level: Level) -> None:
 def end_turn(player: Player, level: Level, log: MessageLog) -> None:
     level.update_fov(player.x, player.y)
     _heal_player(player)
+    _hunger_clock(player, log)
     for actor in level.actors:
         if actor.ai:
             if player.stats.hp == 0:
@@ -39,3 +40,17 @@ def _heal_player(player: Player) -> None:
     if hp_gain > 0:
         player.stats.hp = min(player.stats.hp + hp_gain, player.stats.max_hp)
         player.heal_counter = 0
+
+
+def _hunger_clock(player: Player, log: MessageLog) -> None:
+    prev_value = player.hunger_clock
+    player.hunger_clock -= 1
+    if player.hunger_clock < -850:
+        player.stats.hp = 0
+        player.cause_of_death = "starvation"
+    elif player.hunger_clock < 0 <= prev_value:
+        log.append("You feel too weak from lack of food. You faint.")
+    elif player.hunger_clock < 150 <= prev_value:
+        log.append("You are starting to feel weak.")
+    elif player.hunger_clock < 300 <= prev_value:
+        log.append("You are starting to get hungry.")
