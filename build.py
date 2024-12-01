@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import glob
+import hashlib
 import logging
 import os
 import platform
@@ -38,3 +39,7 @@ fmt = 'gztar' if os.name == 'posix' else 'zip'
 logging.basicConfig(level=logging.INFO)
 file = shutil.make_archive(f'dist/{base_name}', fmt, root_dir='dist', base_dir=project_name, logger=logger)
 logger.info(f"Archive created: {file}")
+# print archive digest
+with open(file, 'rb') as archive:
+    digest = hashlib.file_digest(archive, 'md5')
+logger.info(f"{digest.hexdigest()} *{os.path.basename(file)}")
