@@ -171,6 +171,7 @@ def level_up(player: Actor, log: MessageLog) -> None:
     while player.stats.xp >= threshold:
         level += 1
         threshold *= 2
+    level = min(level, 20)
     if level > player.stats.hd:
         log.append(f"Welcome to level {level}!")
         hp_gain = roll(level - player.stats.hd, d=10)

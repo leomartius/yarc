@@ -71,7 +71,10 @@ class RestoreStrength(Consumable):
 @dataclass(frozen=True, slots=True)
 class RaiseLevel(Consumable):
     def use(self, actor: Actor, level: Level, log: MessageLog) -> None:
-        actor.stats.xp = 5 * 2**actor.stats.hd + 1
+        target_xp = 10
+        while target_xp <= actor.stats.xp:
+            target_xp *= 2
+        actor.stats.xp = target_xp + 1
         log.append("You suddenly feel much more skillful.")
         level_up(actor, log)
 
