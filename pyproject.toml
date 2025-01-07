@@ -1,6 +1,6 @@
 [tool.mypy]
 files = ["main.py", "game/**/*.py"]
-python_version = "3.12"
+python_version = "3.13"
 disallow_untyped_calls = true
 disallow_untyped_defs = true
 disallow_untyped_decorators = true
@@ -16,7 +16,7 @@ pythonpath = ["."]
 
 [tool.ruff]
 include = ["main.py", "game/**/*.py"]
-target-version = "py312"
+target-version = "py313"
 line-length = 120
 indent-width = 4
 

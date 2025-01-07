@@ -6,7 +6,7 @@ permissions:
   contents: write  # required by `action-gh-release`
 
 env:
-  python-version: "3.12"
+  python-version: "3.13"
 
 jobs:
   package:
