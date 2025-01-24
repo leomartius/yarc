@@ -26,8 +26,12 @@ class Theme:
         return tcod.tileset.load_tilesheet(datadir / filename, columns, rows, charmap)
 
 
+ASCII = range(32, 128)
+CP437 = tcod.tileset.CHARMAP_CP437
+
+
 default = Theme(
-    tileset=('vga-8x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437),
+    tileset=('vga-8x16-cp437.png', 16, 16, CP437),
     default_fg=(0xAA, 0xAA, 0xAA),
     default_bg=(0x00, 0x00, 0x00),
     status_fg=(0xAA, 0xAA, 0xAA),
@@ -92,7 +96,8 @@ default = Theme(
 # a CRT display. The colors aim to approximate those of P3 (amber), P1 (green),
 # and P4 (white) phosphors, displayed on a dark gray background.
 
-VT220 = ('vt220-10x20-ascii.png', 16, 6, range(32, 128))
+VT220 = ('vt220-10x20-ascii.png', 16, 6, ASCII)
+
 MONO_BLACK = (0x1E, 0x1E, 0x1E)
 MONO_AMBER = (0xFF, 0xA4, 0x00)
 MONO_GREEN = (0x41, 0xFF, 0x00)
@@ -271,8 +276,8 @@ vt220_white = Theme(
 #  DOS emulation
 # ===============
 
-CGA = ('cga-8x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437)
-VGA = ('vga-8x16-cp437.png', 16, 16, tcod.tileset.CHARMAP_CP437)
+CGA = ('cga-8x16-cp437.png', 16, 16, CP437)
+VGA = ('vga-8x16-cp437.png', 16, 16, CP437)
 
 CGA_BLACK = (0x00, 0x00, 0x00)
 CGA_BLUE = (0x00, 0x00, 0xAA)
