@@ -407,3 +407,126 @@ dos_vga = Theme(
     ),
     unexplored=np.void((0x0020, CGA_LIGHT_GRAY, CGA_BLACK), dtype=tcod.console.rgb_graphic),
 )
+
+
+# ===============
+#  X11 emulation
+# ===============
+
+FIXED = ('fixed-6x13-ascii.png', 16, 6, ASCII)
+
+XTERM_BLACK = (0x00, 0x00, 0x00)
+XTERM_GRAY90 = (0xE5, 0xE5, 0xE5)
+XTERM_WHITE = (0xFF, 0xFF, 0xFF)
+
+xterm_dark = Theme(
+    tileset=FIXED,
+    default_fg=XTERM_GRAY90,
+    default_bg=XTERM_BLACK,
+    status_fg=XTERM_GRAY90,
+    monster_fg=XTERM_GRAY90,
+    entity_glyphs=[
+        ('@', XTERM_GRAY90),  # player
+        ('*', XTERM_GRAY90),  # gold
+        ('!', XTERM_GRAY90),  # potion
+        ('?', XTERM_GRAY90),  # scroll
+        (':', XTERM_GRAY90),  # food
+        (')', XTERM_GRAY90),  # weapon
+        (']', XTERM_GRAY90),  # armor
+        ('=', XTERM_GRAY90),  # ring
+        ('/', XTERM_GRAY90),  # wand
+        (',', XTERM_GRAY90),  # amulet
+        ('$', XTERM_GRAY90),  # magic
+    ],
+    visible_glyphs=np.array(
+        [
+            (ord(' '), XTERM_GRAY90, XTERM_BLACK),  # rock
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # top left corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # top right corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # bottom left corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # bottom right corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # horizontal wall
+            (ord('|'), XTERM_GRAY90, XTERM_BLACK),  # vertical wall
+            (ord('.'), XTERM_GRAY90, XTERM_BLACK),  # floor
+            (ord('#'), XTERM_GRAY90, XTERM_BLACK),  # passage
+            (ord('%'), XTERM_GRAY90, XTERM_BLACK),  # stairs
+            (ord('^'), XTERM_GRAY90, XTERM_BLACK),  # trap
+            (ord('+'), XTERM_GRAY90, XTERM_BLACK),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    explored_glyphs=np.array(
+        [
+            (ord(' '), XTERM_GRAY90, XTERM_BLACK),  # rock
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # top left corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # top right corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # bottom left corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # bottom right corner
+            (ord('-'), XTERM_GRAY90, XTERM_BLACK),  # horizontal wall
+            (ord('|'), XTERM_GRAY90, XTERM_BLACK),  # vertical wall
+            (ord('.'), XTERM_GRAY90, XTERM_BLACK),  # floor
+            (ord('#'), XTERM_GRAY90, XTERM_BLACK),  # passage
+            (ord('%'), XTERM_GRAY90, XTERM_BLACK),  # stairs
+            (ord('^'), XTERM_GRAY90, XTERM_BLACK),  # trap
+            (ord('+'), XTERM_GRAY90, XTERM_BLACK),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    unexplored=np.void((ord(' '), XTERM_GRAY90, XTERM_BLACK), dtype=tcod.console.rgb_graphic),
+)
+
+xterm_light = Theme(
+    tileset=FIXED,
+    default_fg=XTERM_BLACK,
+    default_bg=XTERM_WHITE,
+    status_fg=XTERM_BLACK,
+    monster_fg=XTERM_BLACK,
+    entity_glyphs=[
+        ('@', XTERM_BLACK),  # player
+        ('*', XTERM_BLACK),  # gold
+        ('!', XTERM_BLACK),  # potion
+        ('?', XTERM_BLACK),  # scroll
+        (':', XTERM_BLACK),  # food
+        (')', XTERM_BLACK),  # weapon
+        (']', XTERM_BLACK),  # armor
+        ('=', XTERM_BLACK),  # ring
+        ('/', XTERM_BLACK),  # wand
+        (',', XTERM_BLACK),  # amulet
+        ('$', XTERM_BLACK),  # magic
+    ],
+    visible_glyphs=np.array(
+        [
+            (ord(' '), XTERM_BLACK, XTERM_WHITE),  # rock
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # top left corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # top right corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # bottom left corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # bottom right corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # horizontal wall
+            (ord('|'), XTERM_BLACK, XTERM_WHITE),  # vertical wall
+            (ord('.'), XTERM_BLACK, XTERM_WHITE),  # floor
+            (ord('#'), XTERM_BLACK, XTERM_WHITE),  # passage
+            (ord('%'), XTERM_BLACK, XTERM_WHITE),  # stairs
+            (ord('^'), XTERM_BLACK, XTERM_WHITE),  # trap
+            (ord('+'), XTERM_BLACK, XTERM_WHITE),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    explored_glyphs=np.array(
+        [
+            (ord(' '), XTERM_BLACK, XTERM_WHITE),  # rock
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # top left corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # top right corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # bottom left corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # bottom right corner
+            (ord('-'), XTERM_BLACK, XTERM_WHITE),  # horizontal wall
+            (ord('|'), XTERM_BLACK, XTERM_WHITE),  # vertical wall
+            (ord('.'), XTERM_BLACK, XTERM_WHITE),  # floor
+            (ord('#'), XTERM_BLACK, XTERM_WHITE),  # passage
+            (ord('%'), XTERM_BLACK, XTERM_WHITE),  # stairs
+            (ord('^'), XTERM_BLACK, XTERM_WHITE),  # trap
+            (ord('+'), XTERM_BLACK, XTERM_WHITE),  # door
+        ],
+        dtype=tcod.console.rgb_graphic,
+    ),
+    unexplored=np.void((ord(' '), XTERM_BLACK, XTERM_WHITE), dtype=tcod.console.rgb_graphic),
+)

@@ -44,6 +44,8 @@ Character glyphs are adapted from the following sources:
 
 - [Bitmap fonts compatible w/VGA text mode](https://github.com/viler-int10h/vga-text-mode-fonts) by VileR
 
+- [Unicode fonts and tools for X11](https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html) by Markus Kuhn
+
 Thank you to the authors and contributors of these projects for their
 invaluable work!
 
